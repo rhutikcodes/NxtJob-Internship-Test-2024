@@ -1,8 +1,9 @@
-import { int, mysqlTable, serial, varchar } from "drizzle-orm/mysql-core";
+import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
-export const userSchema = mysqlTable("users", {
+export const userSchema = pgTable("user", {
   id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }),
+  phone: integer("phone"),
   email: varchar("email", { length: 256 }),
   password: varchar("password", { length: 256 }),
-  phonenumber: int("phonenumber"),
 });
