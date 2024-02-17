@@ -1,13 +1,18 @@
-import { Hono } from "hono";
+import { Context, Env, Hono } from "hono";
 import { RegExpRouter } from "hono/router/reg-exp-router";
 import { eq } from "drizzle-orm";
-import { sign } from "@tsndr/cloudflare-worker-jwt";
+import { sign, verify, decode } from "@tsndr/cloudflare-worker-jwt";
+import { getCookie, setCookie } from "hono/cookie";
 
 import { userSchema } from "../../db/schema";
 
 import db from "../config/database";
 
 const userRoute = new Hono({ router: new RegExpRouter() });
+
+interface ExtendedContext extends Context<Env, "/auth/*", {}> {
+  user: any;
+}
 
 userRoute.get("/getUsers", async (c) => {
   const res = await db.select().from(userSchema);
@@ -35,13 +40,36 @@ userRoute.post("/login", async (c) => {
   if (user[0].password !== body.password)
     return c.json({ success: false, error: "Invalid Password" });
   const token = await sign(
-    { ...user, exp: Math.floor(Date.now() / 1000) + 24 * (60 * 60) },
+    { ...user[0], exp: Math.floor(Date.now() / 1000) + 24 * (60 * 60) },
     "fjwkn"
   );
+  const currentDate = new Date();
+  const expirationDate = new Date(
+    currentDate.getTime() + 2 * 24 * 60 * 60 * 1000
+  );
+  setCookie(c, "token", token, {
+    expires: expirationDate,
+  });
   return c.json({
     success: true,
     message: "Login successful",
     token,
+  });
+});
+
+userRoute.use("/auth/*", async (c, next) => {
+  const token = getCookie(c, "token") as string;
+  const isValid = verify(token, "fjwkn");
+  if (!isValid) return;
+  const { payload } = decode(token);
+  (c as ExtendedContext).user = payload;
+  await next();
+});
+
+userRoute.get("/auth/profile", async (c) => {
+  const user = (c as ExtendedContext).user;
+  return c.json({
+    user,
   });
 });
 
