@@ -10,10 +10,12 @@ import db from "../config/database";
 
 const userRoute = new Hono({ router: new RegExpRouter() });
 
+//defining the type of c
 interface ExtendedContext extends Context<Env, "/auth/*", {}> {
   user: any;
 }
 
+//routes
 userRoute.get("/getUsers", async (c) => {
   const res = await db.select().from(userSchema);
   return c.json(res);
@@ -57,6 +59,7 @@ userRoute.post("/login", async (c) => {
   });
 });
 
+//middleware to check authentication of the user
 userRoute.use("/auth/*", async (c, next) => {
   const token = getCookie(c, "token") as string;
   const isValid = verify(token, "fjwkn");
