@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.8.1",
+    "@tsndr/cloudflare-worker-jwt": "^2.4.5",
     "drizzle-orm": "^0.29.3",
     "hono": "^4.0.2",
     "mysql2": "^3.9.1"
