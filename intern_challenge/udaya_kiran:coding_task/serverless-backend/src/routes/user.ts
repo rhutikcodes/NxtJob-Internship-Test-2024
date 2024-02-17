@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { sign, verify, decode } from "@tsndr/cloudflare-worker-jwt";
 import { getCookie, setCookie } from "hono/cookie";
 
-import { userSchema } from "../../db/schema";
+import { availableDatesSchema, userSchema } from "../../db/schema";
 
 import db from "../config/database";
 
@@ -14,6 +14,13 @@ const userRoute = new Hono({ router: new RegExpRouter() });
 interface ExtendedContext extends Context<Env, "/auth/*", {}> {
   user: any;
 }
+
+type user = {
+  id: number;
+  name: string;
+  email: string;
+  phone: number;
+};
 
 //routes
 userRoute.get("/getUsers", async (c) => {
@@ -74,6 +81,16 @@ userRoute.get("/auth/profile", async (c) => {
   return c.json({
     user,
   });
+});
+
+userRoute.post("/auth/add-date", async (c) => {
+  const user: user = (c as ExtendedContext).user;
+  const body = await c.req.json();
+  const newDate = await db
+    .insert(availableDatesSchema)
+    .values({ ...body, user_id: user.id });
+
+  return c.json(newDate);
 });
 
 export { userRoute };
