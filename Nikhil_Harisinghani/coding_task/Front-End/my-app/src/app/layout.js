@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider, useUser, RedirectToSignIn, SignIn, SignedIn, } from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
 import Header from "@/components/Header";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,12 +17,9 @@ export default function RootLayout({ children }) {
         <html lang="en">
           <body className={inter.className}>
             <Header />
-            {/* {console.log(children)} */}
-            {/* Hello */}
-            <main>
+            <main className="flex justify-center items-center">
               {children}
             </main>
-
           </body>
         </html>
 
@@ -30,3 +27,6 @@ export default function RootLayout({ children }) {
     </>
   );
 }
+// <div class="h-56 grid grid-cols-3 gap-4 content-center">
+// <!-- Your grid items go here -->
+// </div>

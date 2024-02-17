@@ -24,7 +24,9 @@ export default function Header() {
                                 <Link href='/sign-up'>SignUp</Link>
                             </div>
                             :
-                            <div>
+                            <div className='flex'>
+                                <Link href='/availability' className='mr-3'>Availability</Link>
+                                <Link href='/events' className='mr-3'>Events</Link>
                                 <UserButton afterSignOutUrl='/' />
                             </div>
                     }
