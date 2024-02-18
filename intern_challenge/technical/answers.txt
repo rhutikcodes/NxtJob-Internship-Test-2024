@@ -1,11 +1,123 @@
 1. Attach a prisma.schema or schema.ts (Drizzle) file from one of your past projects where you have used Prisma or Drizzle ORM.
-->
+-> I had used typeorm to write schemas while building bus booking api's using nestjs
+user.entity.ts: -
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column({ default: false })
+  isAdmin: boolean;
+
+  @Column('simple-array', { default: () => 'ARRAY[]::varchar[]' })
+  bookings: [];
+}
+
+bus.entity.ts: -
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+
+import { Service } from './service.entity';
+import { Seat } from './seat.entity';
+
+@Entity()
+export class Bus {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  busType: string;
+
+  @Column()
+  numberPlate: string;
+
+  @ManyToOne(() => Service, (service) => service.buses)
+  service: Service;
+
+  @OneToMany(() => Seat, (seat) => seat.bus)
+  seats: Seat[];
+}
+
+seat.entity.ts
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Bus } from './bus.entity';
+
+@Entity()
+export class Seat {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  row: number;
+
+  @Column()
+  column: number;
+
+  @Column({ default: true })
+  isAvailable: boolean;
+
+  @Column({ enum: ['window', 'aisel'] })
+  seatType: string;
+
+  @ManyToOne(() => Bus, (bus) => bus.seats)
+  bus: Bus;
+}
+
+service.entity.ts
+import { Bus } from './bus.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+
+@Entity()
+export class Service {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  serviceNumber: string;
+
+  @Column()
+  from: string;
+
+  @Column()
+  to: string;
+
+  @Column('simple-array', { default: () => 'ARRAY[]::varchar[]' })
+  via: string[];
+
+  @Column('simple-array', { default: () => 'ARRAY[]::varchar[]' })
+  availableDays: string[];
+
+  @OneToMany(() => Bus, (bus) => bus.service)
+  buses: Bus[];
+}
 
 2. Explain, in your own words, the difference between "Edge Serverless" and "Serverless".
-->
+-> Serverless where developer focuses more on code without worrying about infrastructure. Cloud services automatically scale up and down based on the demand. It follows pay on demand, where as edge computing or edge serverless is mainly used for delivering more content with less latency. Cache servers are present near the user's location. Edge serverless are used more often for content delivery platforms, IOT.
 
 3. Describe when and where you usually encounter bugs in your development process.
-->
+-> There are few instances that I encounter bugs in the syntax which I later correct it by referring the documentation. Other than that I encounter bugs while writing the business logic, sometimes code doesn't work the way I want in that case I just debug it and fix it with help of stackoverflow.
 
 4. Discuss the importance of maintaining clean and readable code. What best practices do you follow to structure and write code for ease of reading?
-->
+-> Maintaining clean code is really impoertant espeacially in the case of heavy code repos. Here some of the practices for maintaining clean code:
+-> Folder structure: Maintaining proper and structured folders will help in reviewing the code if there are any bugs.
+-> Commenting the code: Commenting each file and logic helps a enw developer to understand the code well.
+-> Reusing the code: If there is a logic which needs to be repeated in more than one file then it must be converted to a function and put under utils folder. Now we can use this logic in many files and if there is a need to change the logic the change needs to be done in only one file hence improving efficiency and reducing the errors.
