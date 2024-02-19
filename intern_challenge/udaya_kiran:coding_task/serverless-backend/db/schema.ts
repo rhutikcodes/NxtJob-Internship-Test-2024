@@ -1,4 +1,12 @@
-import { date, integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import {
+  date,
+  integer,
+  pgTable,
+  serial,
+  time,
+  varchar,
+  boolean,
+} from "drizzle-orm/pg-core";
 
 export const userSchema = pgTable("user", {
   id: serial("id").primaryKey(),
@@ -14,4 +22,14 @@ export const availableDatesSchema = pgTable("available_dates", {
     .references(() => userSchema.id, { onDelete: "cascade" })
     .notNull(),
   available_date: date("available_date").notNull(),
+});
+
+export const availableTimingsSchema = pgTable("available_timings", {
+  id: serial("id").primaryKey(),
+  available_date_id: integer("available_date_id")
+    .references(() => availableDatesSchema.id, { onDelete: "cascade" })
+    .notNull(),
+  start_time: time("start_time").notNull(),
+  end_time: time("end_time").notNull(),
+  is_slot_available: boolean("is_slot_available").default(true),
 });

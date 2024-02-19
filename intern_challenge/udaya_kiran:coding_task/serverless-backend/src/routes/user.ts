@@ -1,10 +1,14 @@
 import { Context, Env, Hono } from "hono";
 import { RegExpRouter } from "hono/router/reg-exp-router";
-import { eq } from "drizzle-orm";
+import { and, between, eq, or } from "drizzle-orm";
 import { sign, verify, decode } from "@tsndr/cloudflare-worker-jwt";
 import { getCookie, setCookie } from "hono/cookie";
 
-import { availableDatesSchema, userSchema } from "../../db/schema";
+import {
+  availableDatesSchema,
+  availableTimingsSchema,
+  userSchema,
+} from "../../db/schema";
 
 import db from "../config/database";
 
@@ -106,6 +110,42 @@ userRoute.get("/get-dates/:id", async (c) => {
     .where(eq(availableDatesSchema.user_id, user_id));
 
   return c.json(dates);
+});
+
+userRoute.post("/auth/add-timings/:date_id", async (c) => {
+  const { date_id } = c.req.param();
+  const available_date_id = Number(date_id);
+  const body = await c.req.json();
+  const is_timings_present = await db
+    .select()
+    .from(availableTimingsSchema)
+    .where(
+      and(
+        eq(availableTimingsSchema.available_date_id, available_date_id),
+        or(
+          between(
+            body.start_time,
+            availableTimingsSchema.start_time,
+            availableTimingsSchema.end_time
+          ),
+          between(
+            body.end_time,
+            availableTimingsSchema.start_time,
+            availableTimingsSchema.end_time
+          ),
+          between(
+            availableTimingsSchema.start_time,
+            body.start_time,
+            body.end_time
+          )
+        )
+      )
+    );
+  if (is_timings_present.length > 0) return c.json("Timings clashing");
+  const new_timings = await db
+    .insert(availableTimingsSchema)
+    .values({ ...body, available_date_id });
+  return c.json(new_timings);
 });
 
 export { userRoute };
