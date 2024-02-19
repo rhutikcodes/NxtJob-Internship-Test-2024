@@ -93,4 +93,15 @@ userRoute.post("/auth/add-date", async (c) => {
   return c.json(newDate);
 });
 
+userRoute.get("/get-dates/:id", async (c) => {
+  const { id } = c.req.param();
+  const user_id = Number(id);
+  const dates = await db
+    .select()
+    .from(availableDatesSchema)
+    .where(eq(availableDatesSchema.user_id, user_id));
+
+  return c.json(dates);
+});
+
 export { userRoute };
