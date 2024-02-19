@@ -1,0 +1,185 @@
+{
+  "id": "dba90e83-9cf2-4a85-8c60-a3e665de0c4b",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "availability": {
+      "name": "availability",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "monfrom": {
+          "name": "monfrom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "montill": {
+          "name": "montill",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tuefrom": {
+          "name": "tuefrom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tuetill": {
+          "name": "tuetill",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wedfrom": {
+          "name": "wedfrom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wedtill": {
+          "name": "wedtill",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "thufrom": {
+          "name": "thufrom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "thutill": {
+          "name": "thutill",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "frifrom": {
+          "name": "frifrom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fritill": {
+          "name": "fritill",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "satfrom": {
+          "name": "satfrom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sattill": {
+          "name": "sattill",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sunfrom": {
+          "name": "sunfrom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "suntill": {
+          "name": "suntill",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "firstlogin": {
+      "name": "firstlogin",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "products": {
+      "name": "products",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price": {
+          "name": "price",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "products_name_unique": {
+          "name": "products_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
