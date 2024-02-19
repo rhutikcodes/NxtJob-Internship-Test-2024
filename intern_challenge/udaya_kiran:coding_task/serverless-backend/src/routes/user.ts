@@ -98,7 +98,11 @@ userRoute.get("/get-dates/:id", async (c) => {
   const user_id = Number(id);
   const dates = await db
     .select()
-    .from(availableDatesSchema)
+    .from(userSchema)
+    .leftJoin(
+      availableDatesSchema,
+      eq(userSchema.id, availableDatesSchema.user_id)
+    )
     .where(eq(availableDatesSchema.user_id, user_id));
 
   return c.json(dates);
