@@ -33,3 +33,15 @@ export const availableTimingsSchema = pgTable("available_timings", {
   end_time: time("end_time").notNull(),
   is_slot_available: boolean("is_slot_available").default(true),
 });
+
+export const appointmentSchema = pgTable("appointments", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").references(() => userSchema.id, {
+    onDelete: "cascade",
+  }),
+  guest_email: varchar("guest_email").notNull(),
+  guest_phone: varchar("guest_phone").notNull(),
+  appintment_time_id: integer("appintment_time_id")
+    .references(() => availableTimingsSchema.id, { onDelete: "cascade" })
+    .notNull(),
+});
