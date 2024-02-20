@@ -162,7 +162,8 @@ userRoute.get("/timings/:user_id/:date_id", async (c) => {
     .where(
       and(
         eq(availableDatesSchema.user_id, userId),
-        eq(availableTimingsSchema.available_date_id, dateId)
+        eq(availableTimingsSchema.available_date_id, dateId),
+        eq(availableTimingsSchema.is_slot_available, true)
       )
     );
 
