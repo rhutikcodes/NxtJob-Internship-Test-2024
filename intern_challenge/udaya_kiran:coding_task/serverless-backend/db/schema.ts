@@ -39,9 +39,9 @@ export const appointmentSchema = pgTable("appointments", {
   user_id: integer("user_id").references(() => userSchema.id, {
     onDelete: "cascade",
   }),
-  guest_email: varchar("guest_email").notNull(),
-  guest_phone: varchar("guest_phone").notNull(),
-  appintment_time_id: integer("appintment_time_id")
+  guest_email: varchar("guest_email", { length: 256 }).notNull(),
+  guest_phone: varchar("guest_phone", { length: 256 }).notNull(),
+  appointment_time_id: integer("appointment_time_id")
     .references(() => availableTimingsSchema.id, { onDelete: "cascade" })
     .notNull(),
 });
