@@ -148,4 +148,28 @@ userRoute.post("/auth/add-timings/:date_id", async (c) => {
   return c.json(new_timings);
 });
 
+userRoute.get("/timings/:user_id/:date_id", async (c) => {
+  const { date_id, user_id } = c.req.param();
+  const dateId = Number(date_id);
+  const userId = Number(user_id);
+  const timings = await db
+    .select()
+    .from(availableTimingsSchema)
+    .leftJoin(
+      availableDatesSchema,
+      eq(availableTimingsSchema.available_date_id, availableDatesSchema.id)
+    )
+    .where(
+      and(
+        eq(availableDatesSchema.user_id, userId),
+        eq(availableTimingsSchema.available_date_id, dateId)
+      )
+    );
+
+  return c.json({
+    success: true,
+    timings,
+  });
+});
+
 export { userRoute };
