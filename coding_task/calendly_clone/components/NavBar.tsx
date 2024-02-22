@@ -14,14 +14,15 @@ export const NavBar = ({}) => {
               <NavMenu />
             </div>
             <div className="text-sm">
-              <a className="pr-4" href="#">
+              <a className="pr-4" href="/sign-in">
                 Log In
               </a>
               <Button
                 variant="default"
                 className="bg-blue-700 h-10 w-28 hover:bg-blue-800 text-white"
-              >
+              ><a href="/sign-up">
                 Get Started
+              </a>
               </Button>
             </div>
           </div>

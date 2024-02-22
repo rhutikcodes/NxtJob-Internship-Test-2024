@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { LanguageSelector } from "@/components/LanguageSelector";
-import NavBar from "@/components/NavBar";
+import SimpleNavBar from "@/components/SimpleNavBar";
 import React from "react";
 import { LanguageSelectorWrapper, NavBarWrapper } from "@/components/ComponentWrapper";
-import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Calendly Clone",
+  title: "Welcome to back (Sign in)",
   description:
-    "Calendly is a scheduling app that makes it easy to book meetings with others. This is a clone of the app.",
+    "This is the sign in page for the Calendly clone.",
 };
 
 export default function RootLayout({
@@ -28,13 +26,12 @@ export default function RootLayout({
         <LanguageSelector />
         </LanguageSelectorWrapper>
         <NavBarWrapper>
-        <NavBar />
+        <SimpleNavBar />
         </NavBarWrapper>
         <main className="relative">
           <div className="relative -z-100">
-            <ClerkProvider>
             {children}
-            </ClerkProvider></div>
+    </div>
         </main>
       </body>
       </html>
