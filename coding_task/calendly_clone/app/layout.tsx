@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import NavBar from "@/components/NavBar";
+import React from "react";
+import { LanguageSelectorWrapper, NavBarWrapper } from "@/components/ComponentWrapper";
+import clsx from "clsx";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,12 +23,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className={inter.className}>
+
+        <LanguageSelectorWrapper >
         <LanguageSelector />
+        </LanguageSelectorWrapper>
+        <NavBarWrapper>
         <NavBar />
-        <main className="relative flex-grow flex-col min-h-screen">
-          <div className="flex-grow flex-1">{children}</div>
+        </NavBarWrapper>
+        <main className="relative">
+          <div className="relative -z-100">{children}</div>
         </main>
       </body>
-    </html>
+      </html>
   );
 }

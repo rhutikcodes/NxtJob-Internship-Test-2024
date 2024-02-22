@@ -6,11 +6,11 @@ import NavMenu from "./NavMenu.tsx";
 export const NavBar = ({}) => {
   return (
     <MaxWidthContainer>
-      <nav className="bg-white sticky h-20 border-b border-gray-200 inset-x-0 ">
+      <div className="bg-white h-20 border-b border-gray-200">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between pt-5">
             <Logo />
-            <div className="mx-auto flex space-x-10">
+            <div className="mx-auto relative flex space-x-10">
               <NavMenu />
             </div>
             <div className="text-sm">
@@ -26,7 +26,7 @@ export const NavBar = ({}) => {
             </div>
           </div>
         </div>
-      </nav>
+      </div>
     </MaxWidthContainer>
   );
 };

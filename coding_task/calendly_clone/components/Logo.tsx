@@ -3,13 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 function Logo() {
   return (
-    <div className="col-start-2 col-end-2 items-stretch object-contain">
+    <div className=" items-stretch object-contain">
       <Link href="/" prefetch={false} className="overflow-hidden">
         <Image
           priority
           src={calandly_logo}
           alt="Calandly"
-          width="180"
+          width="160"
           height="100"
         />
       </Link>
