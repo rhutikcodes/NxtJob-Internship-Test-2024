@@ -1,11 +1,48 @@
 1. Attach a prisma.schema or schema.ts (Drizzle) file from one of your past projects where you have used Prisma or Drizzle ORM.
-->
+-> generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Form {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  createdAt   DateTime @default(now())
+  published   Boolean  @default(false) // if true, form is published and can be accessed by anyone
+  name        String
+  description String   @default("")
+  content     String   @default("[]")
+
+  visits      Int @default(0)
+  submissions Int @default(0)
+
+  shareUrl       String?          @default(uuid())
+  FormSubmissions FormSubmissions[]
+
+  @@unique([userId, name])
+}
+
+model FormSubmissions {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  formId    Int
+  form      Form     @relation(fields: [formId], references: [id])
+
+   content String
+}
+
+This is one of the projects I was developing a long ago, its a google forms clone.
 
 2. Explain, in your own words, the difference between "Edge Serverless" and "Serverless".
-->
+-> Edge Serverless selects the graphically closer server for you, while serverless 
 
 3. Describe when and where you usually encounter bugs in your development process.
-->
+-> While developing I usually encounter a lot of bugs due to my typo issues in selecting repositories to import or export, and test cases are the place where bugs don't leave me
 
 4. Discuss the importance of maintaining clean and readable code. What best practices do you follow to structure and write code for ease of reading?
-->
+-> As I have contributed to Open Source Projects, I have seen a lot of ways people keep their code organized, through right linting documenting inline, and making readme, I too follow these standards so that I can work in the collaborative environment.

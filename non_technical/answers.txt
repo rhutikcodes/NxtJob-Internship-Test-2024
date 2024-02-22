@@ -1,12 +1,21 @@
 
 1. How do you stay updated on software development topics and remain active in the community? (Forums/Discord/Slack/Meetups/Twitter/Blogs)
-->
+-> I watch Twitch streams and YouTube videos of The-Primegen, Theo, and along with that I follow the Hacker News, as it updates frequently, in addition to that I have followed some very great people on X(Twitter) they too give me updates.
 
 2. What are your most-used IDE and keyboard shortcuts when coding?
-->
+-> Ide I most used are- VS Code and neovim or nvim,sometimes I use WebStorm too.. Shortcuts that I used the most include the too common (copy, paste) kidding, I have bonded my own shortcuts to (duplicate the line down, in neovim I use fuzzy finder and split buffers alot).  
 
 3. How do you approach the design and implementation of a scalable backend system? Feel free to attach code snippets for better explanation.
-->
+-> I follow the SDLC rule I had learned about in college, it includes: 
+   - Planning & Analysis of requirements
+   - Stating the requirements, in all aspects
+   - Designing the whole system
+   - Development & Coding
+   - Thorough testing
+   - Deployment(Release) and Maintenance ( Fixing Bugs)   
 
-4. How do you ensure that your frontend code is functional and reliable? What are your favorite testing methods and tools?
-->
+   This is my approach to any type of development in general, not only specifically backend.
+
+4. How do you ensure that your frontend code is functional and reliable? What are your favourite testing methods and tools?
+
+-> In particular I don't know a lot about the frontend, but I check for some bugs and responsiveness of frontend, Tools that I use are, inspect element of browser and React dev tools for react projects. Also there are n number of online tools available.
