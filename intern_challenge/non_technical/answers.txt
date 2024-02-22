@@ -1,12 +1,26 @@
 
 1. How do you stay updated on software development topics and remain active in the community? (Forums/Discord/Slack/Meetups/Twitter/Blogs)
-->
+-> Linked, Discord and twitter are some of the main sources for me to follow and keep updated with the latest trend in the market. Other than that my friends who are in tech we will discuss and share knowledge with each other whenever we meet.
 
 2. What are your most-used IDE and keyboard shortcuts when coding?
-->
+-> VS Code is most used IDE and now slowly I am learning how to use NeoVim which is a Vim based editor which improves our efficiency while coding.
+Some of the common shortcuts which I use while coding in VS code:
+CMD + Shift + P 
+CMD C
+CMD V
+CMD A
+CMD X
 
 3. How do you approach the design and implementation of a scalable backend system? Feel free to attach code snippets for better explanation.
-->
+-> First I will get to know about the business requirements and decide on the architecture. 
+-> If the requirements demand more consistency but can compromise on availability we can use SQL databases. Example ticket booking websites such as IRCTC and BookMyShow.
+-> If the requirements demands more availability than consistancy then we can use NoSQL databases. Example social media apps.
+-> If the requirements demands absolute less latency such as OTT, Youtube and other CDN platforms then we can use edge serverless computing.
+-> Deciding the framework also depends on requirements. If the requirements demands more CPU intense work the Django is the correct framework and if requirements demands network heavy tasks then Express is the correct choice.
 
 4. How do you ensure that your frontend code is functional and reliable? What are your favorite testing methods and tools?
-->
+-> Here some of the tests I will perform to ensure frontend code is functional and reliable:
+-> Unit Testing
+-> Integration Testing
+-> User Acceptance Testing
+-> Cross-Browser Testing
