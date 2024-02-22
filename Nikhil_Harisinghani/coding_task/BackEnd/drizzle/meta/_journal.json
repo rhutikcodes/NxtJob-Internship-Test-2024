@@ -36,6 +36,20 @@
       "when": 1708616483583,
       "tag": "0004_redundant_quasimodo",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1708625704868,
+      "tag": "0005_chemical_doomsday",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1708626014488,
+      "tag": "0006_famous_morlun",
+      "breakpoints": true
     }
   ]
 }

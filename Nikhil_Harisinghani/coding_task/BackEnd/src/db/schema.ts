@@ -15,7 +15,7 @@ export const userAvailability = pgTable('userAvailability', {
 
 export const userBookedSlots = pgTable('userBookedSlots', {
     email: text('email').references(() => userAvailability.email).primaryKey(),
-    bookedFrom: time('bookedFrom'),
-    bookedTill: time('bookedTill'),
-    bookedTime: time('bookedTime')
+    bookedFrom: time('bookedFrom').notNull(),
+    bookedTill: time('bookedTill').notNull(),
+    bookedDate: date('bookedDate').notNull()
 })

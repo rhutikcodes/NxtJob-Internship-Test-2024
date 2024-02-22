@@ -8,6 +8,8 @@ import { Client } from "@upstash/qstash/.";
 import { Receiver } from '@upstash/qstash';
 import { Resend } from 'resend';
 import { checkAndUpdateAvailability } from "./utils/handleAvailabilityOnLogin";
+import { handleScheduleUpdate } from "./utils/handleScheduleUpdate";
+import { handleSlotBooking } from "./utils/handleSlotBooking";
 
 const resend = new Resend('re_fcxPRKcm_MEPjvA4V7iwCp2ik5na1wpcT');
 
@@ -95,7 +97,9 @@ app.get('/register-user', async (c) => {
 	}
 })
 
+app.post('/update-schedule', (c) => handleScheduleUpdate(c))
 // error -> dont know how to authenticate gmail.com
+app.post('/book-slot', (c) => handleSlotBooking(c));
 app.get('/schedule-mail', async (c) => {
 	// delay calculation logic at bottom DelayClaculation
 	try {

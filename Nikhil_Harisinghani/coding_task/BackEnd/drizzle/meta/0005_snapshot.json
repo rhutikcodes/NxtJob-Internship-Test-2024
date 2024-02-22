@@ -1,0 +1,142 @@
+{
+  "id": "b57aa324-3b4e-4d94-bb80-a034bc0ac041",
+  "prevId": "b5bda263-f7bb-4aa0-ac37-07692a2e0ab3",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "firstlogin": {
+      "name": "firstlogin",
+      "schema": "",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "userAvailability": {
+      "name": "userAvailability",
+      "schema": "",
+      "columns": {
+        "avail": {
+          "name": "avail",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "startTime": {
+          "name": "startTime",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'9:00:00'"
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "endTime": {
+          "name": "endTime",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'5:00:00'"
+        },
+        "isAvail": {
+          "name": "isAvail",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userAvailability_email_firstlogin_email_fk": {
+          "name": "userAvailability_email_firstlogin_email_fk",
+          "tableFrom": "userAvailability",
+          "tableTo": "firstlogin",
+          "columnsFrom": [
+            "email"
+          ],
+          "columnsTo": [
+            "email"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "userBookedSlots": {
+      "name": "userBookedSlots",
+      "schema": "",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "bookedFrom": {
+          "name": "bookedFrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bookedTill": {
+          "name": "bookedTill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bookedDate": {
+          "name": "bookedDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userBookedSlots_email_userAvailability_email_fk": {
+          "name": "userBookedSlots_email_userAvailability_email_fk",
+          "tableFrom": "userBookedSlots",
+          "tableTo": "userAvailability",
+          "columnsFrom": [
+            "email"
+          ],
+          "columnsTo": [
+            "email"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
