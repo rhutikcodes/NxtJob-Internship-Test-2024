@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "db:generate": "drizzle-kit generate:pg --schema ./src/db/schema.ts --out ./src/db/migrations",
+    "db:migrate": "bun run ./src/db/migrate.ts"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.8.1",
+    "drizzle-orm": "^0.29.4",
+    "hono": "^4.0.5",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "@types/pg": "^8.11.0",
+    "drizzle-kit": "^0.20.14",
+    "wrangler": "^3.25.0"
+  }
+}
