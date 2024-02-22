@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { Client } from "@upstash/qstash/.";
 import { Receiver } from '@upstash/qstash';
 import { Resend } from 'resend';
-import { checkAndUpdateAvailability } from "./utils/updateAvailability";
+import { checkAndUpdateAvailability } from "./utils/handleAvailabilityOnLogin";
 
 const resend = new Resend('re_fcxPRKcm_MEPjvA4V7iwCp2ik5na1wpcT');
 
@@ -36,7 +36,6 @@ app.post('*', cors());
 
 app.get('/', async (c) => {
 	try {
-		await db.delete(userAvailability);
 		return c.text('Hello World!')
 	} catch (error) {
 		return c.text("Error")
