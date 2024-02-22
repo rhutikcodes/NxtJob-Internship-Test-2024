@@ -1,4 +1,4 @@
-name = "my-app"
+name = "Calandly-clone"
 compatibility_date = "2023-12-01"
 
 # [vars]
@@ -14,5 +14,5 @@ compatibility_date = "2023-12-01"
 
 # [[d1_databases]]
 # binding = "DB"
-# database_name = "my-database"
+# database_name = "calendly_db"
 # database_id = ""
