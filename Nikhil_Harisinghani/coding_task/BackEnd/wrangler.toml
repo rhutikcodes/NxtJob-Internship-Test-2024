@@ -1,6 +1,6 @@
 name = "back-end"
 main = "src/index.ts"
-compatibility_date = "2024-02-08"
+compatibility_date = "2024-01-29"
 
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
 # Note: Use secrets to store sensitive data.

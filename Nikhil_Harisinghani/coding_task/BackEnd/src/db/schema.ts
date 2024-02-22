@@ -1,39 +1,20 @@
-import { doublePrecision, integer, pgTable, serial, text } from "drizzle-orm/pg-core";
-
-export const products = pgTable('products', {
-    id: serial('id').primaryKey(),
-    name: text('name').unique().notNull(),
-    description: text('description'),
-    price: doublePrecision('price')
-})
+import { pgTable, text, date, time } from "drizzle-orm/pg-core";
 
 export const firstlogin = pgTable('firstlogin', {
-    id: serial('id').primaryKey(),
-    email: text('email'),
+    email: text('email').primaryKey(),
     slug: text('slug')
 });
 
-export const availability = pgTable('availability', {
-    id: serial('id').primaryKey(),
+export const userAvailability = pgTable('userAvailability', {
+    avail: date('avail').notNull(),
+    startTime: time('startTime').notNull(),
+    email: text('email').references(() => firstlogin.email).primaryKey(),
+    endTime: time('endTime').notNull()
+})
 
-    monfrom: text('monfrom'),
-    montill: text('montill'),
-
-    tuefrom: text('tuefrom'),
-    tuetill: text('tuetill'),
-
-    wedfrom: text('wedfrom'),
-    wedtill: text('wedtill'),
-
-    thufrom: text('thufrom'),
-    thutill: text('thutill'),
-
-    frifrom: text('frifrom'),
-    fritill: text('fritill'),
-
-    satfrom: text('satfrom'),
-    sattill: text('sattill'),
-
-    sunfrom: text('sunfrom'),
-    suntill: text('suntill'),
+export const userBookedSlots = pgTable('userBookedSlots', {
+    email: text('email').references(() => userAvailability.email).primaryKey(),
+    bookedFrom: time('bookedFrom'),
+    bookedTill: time('bookedTill'),
+    bookedTime: time('bookedTime')
 })
