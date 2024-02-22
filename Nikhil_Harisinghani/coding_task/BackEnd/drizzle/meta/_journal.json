@@ -8,6 +8,34 @@
       "when": 1708538538965,
       "tag": "0000_fast_pet_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708600693000,
+      "tag": "0001_zippy_malice",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1708609570103,
+      "tag": "0002_absurd_jackpot",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1708616331184,
+      "tag": "0003_young_eternals",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1708616483583,
+      "tag": "0004_redundant_quasimodo",
+      "breakpoints": true
     }
   ]
 }

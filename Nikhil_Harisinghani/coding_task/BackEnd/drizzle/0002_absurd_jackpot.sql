@@ -1,0 +1,1 @@
+ALTER TABLE "userAvailability" DROP COLUMN IF EXISTS "isAvail";

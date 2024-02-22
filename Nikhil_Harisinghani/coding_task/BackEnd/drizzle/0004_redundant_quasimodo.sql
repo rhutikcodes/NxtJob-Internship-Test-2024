@@ -1,0 +1,1 @@
+ALTER TABLE "userAvailability" ALTER COLUMN "isAvail" SET DEFAULT true;
