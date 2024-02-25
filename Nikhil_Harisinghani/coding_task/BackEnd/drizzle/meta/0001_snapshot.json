@@ -1,6 +1,6 @@
 {
-  "id": "9940ba08-0998-4fb0-b732-a989c4c0fbed",
-  "prevId": "5af88602-9a46-4666-b1b1-c7f41c537c5c",
+  "id": "52dd3974-475d-46f1-ae76-bea871335e54",
+  "prevId": "774c27a4-d1c5-4111-8824-115719c2c9de",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -16,6 +16,22 @@
         },
         "slug": {
           "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "tp": {
+      "name": "tp",
+      "schema": "",
+      "columns": {
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -46,8 +62,8 @@
         "email": {
           "name": "email",
           "type": "text",
-          "primaryKey": true,
-          "notNull": true
+          "primaryKey": false,
+          "notNull": false
         },
         "endTime": {
           "name": "endTime",
@@ -60,6 +76,13 @@
           "name": "isAvail",
           "type": "boolean",
           "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
           "notNull": true
         }
       },
@@ -89,34 +112,40 @@
         "email": {
           "name": "email",
           "type": "text",
-          "primaryKey": true,
-          "notNull": true
+          "primaryKey": false,
+          "notNull": false
         },
         "bookedFrom": {
           "name": "bookedFrom",
           "type": "time",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "bookedTill": {
           "name": "bookedTill",
           "type": "time",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "bookedTime": {
-          "name": "bookedTime",
-          "type": "time",
+        "bookedDate": {
+          "name": "bookedDate",
+          "type": "date",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "userBookedSlots_email_userAvailability_email_fk": {
-          "name": "userBookedSlots_email_userAvailability_email_fk",
+        "userBookedSlots_email_firstlogin_email_fk": {
+          "name": "userBookedSlots_email_firstlogin_email_fk",
           "tableFrom": "userBookedSlots",
-          "tableTo": "userAvailability",
+          "tableTo": "firstlogin",
           "columnsFrom": [
             "email"
           ],

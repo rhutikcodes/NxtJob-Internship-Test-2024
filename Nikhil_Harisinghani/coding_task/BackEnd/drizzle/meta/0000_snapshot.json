@@ -1,5 +1,5 @@
 {
-  "id": "5af88602-9a46-4666-b1b1-c7f41c537c5c",
+  "id": "774c27a4-d1c5-4111-8824-115719c2c9de",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -40,18 +40,33 @@
           "name": "startTime",
           "type": "time",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false,
+          "default": "'9:00:00'"
         },
         "email": {
           "name": "email",
           "type": "text",
-          "primaryKey": true,
-          "notNull": true
+          "primaryKey": false,
+          "notNull": false
         },
         "endTime": {
           "name": "endTime",
           "type": "time",
           "primaryKey": false,
+          "notNull": false,
+          "default": "'5:00:00'"
+        },
+        "isAvail": {
+          "name": "isAvail",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
           "notNull": true
         }
       },
@@ -81,34 +96,40 @@
         "email": {
           "name": "email",
           "type": "text",
-          "primaryKey": true,
-          "notNull": true
+          "primaryKey": false,
+          "notNull": false
         },
         "bookedFrom": {
           "name": "bookedFrom",
           "type": "time",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "bookedTill": {
           "name": "bookedTill",
           "type": "time",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "bookedTime": {
-          "name": "bookedTime",
-          "type": "time",
+        "bookedDate": {
+          "name": "bookedDate",
+          "type": "date",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "userBookedSlots_email_userAvailability_email_fk": {
-          "name": "userBookedSlots_email_userAvailability_email_fk",
+        "userBookedSlots_email_firstlogin_email_fk": {
+          "name": "userBookedSlots_email_firstlogin_email_fk",
           "tableFrom": "userBookedSlots",
-          "tableTo": "userAvailability",
+          "tableTo": "firstlogin",
           "columnsFrom": [
             "email"
           ],

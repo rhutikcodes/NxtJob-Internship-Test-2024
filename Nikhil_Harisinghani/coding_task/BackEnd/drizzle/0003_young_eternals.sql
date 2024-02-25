@@ -1,1 +1,0 @@
-ALTER TABLE "userAvailability" ADD COLUMN "isAvail" boolean NOT NULL;

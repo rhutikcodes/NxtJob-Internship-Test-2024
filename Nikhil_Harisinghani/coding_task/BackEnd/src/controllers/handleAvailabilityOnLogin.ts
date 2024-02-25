@@ -27,17 +27,6 @@ export async function checkAndUpdateAvailability(userEmail: string) {
     let currentDate = new Date();
     const date = currentDate.toISOString().split('T')[0];
 
-    const check = await db.select().from(userAvailability).where(
-        and(
-            eq(userAvailability.email, userEmail),
-            eq(userAvailability.avail, date)
-        )
-    )
-
-    if (check.length === 0) {
-        await db.insert(userAvailability).values({ email: userEmail, avail: date, isAvail: true })
-    }
-
     const next7Days = getNext7DaysWithDayNames()
 
     let res: Array<{ from: string, till: string, day: string, isAvail: boolean }> = [];
@@ -68,7 +57,8 @@ export async function checkAndUpdateAvailability(userEmail: string) {
         }
     }
 
-    console.log("Successfully executed");
+    console.log("Successfully executed and Ready to login");
 
     return res;
 }
+// reason why we send entire weeks availability is bcz we woudn't know changes in the availability if there are any also sending incomplete data will make it harder on frotend to implement

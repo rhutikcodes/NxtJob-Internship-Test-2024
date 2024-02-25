@@ -5,50 +5,15 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1708538538965,
-      "tag": "0000_fast_pet_avengers",
+      "when": 1708781932681,
+      "tag": "0000_dapper_doctor_strange",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "5",
-      "when": 1708600693000,
-      "tag": "0001_zippy_malice",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1708609570103,
-      "tag": "0002_absurd_jackpot",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1708616331184,
-      "tag": "0003_young_eternals",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1708616483583,
-      "tag": "0004_redundant_quasimodo",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1708625704868,
-      "tag": "0005_chemical_doomsday",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1708626014488,
-      "tag": "0006_famous_morlun",
+      "when": 1708781987926,
+      "tag": "0001_panoramic_namor",
       "breakpoints": true
     }
   ]

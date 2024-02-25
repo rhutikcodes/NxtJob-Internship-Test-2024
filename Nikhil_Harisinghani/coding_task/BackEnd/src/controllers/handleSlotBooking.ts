@@ -89,7 +89,7 @@ export async function handleSlotBooking(e: Context) {
     await db.insert(userBookedSlots).values({ email: emailTo, bookedFrom: meetStart, bookedTill: meetEnd, bookedDate: date })
     return e.json({
         "message": "Meeting scheduled",
-        "success": "true"
+        "success": true
     })
 }
 
