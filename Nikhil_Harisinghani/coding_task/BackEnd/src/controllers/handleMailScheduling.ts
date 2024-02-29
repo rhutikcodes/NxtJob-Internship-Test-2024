@@ -11,7 +11,7 @@ export async function handleMailScheduling(c: Context) {
         });
 
         const res = await client.publishJSON({
-            url: `https://a861-103-25-169-39.ngrok-free.app `,
+            url: `https://back-end.nikhilharisinghani26.workers.dev`,
             body: {
                 hello: "world",
                 to: body.to

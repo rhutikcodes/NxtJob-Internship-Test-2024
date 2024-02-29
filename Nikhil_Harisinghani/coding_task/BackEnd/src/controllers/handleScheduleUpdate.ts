@@ -117,3 +117,4 @@ export async function handleScheduleUpdate(e: Context) {
         })
     }
 }
+// any weekday 9-5 and off on weekends

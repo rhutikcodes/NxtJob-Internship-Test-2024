@@ -2,16 +2,19 @@ import { Hono } from "hono";
 import { cors } from 'hono/cors';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { handleScheduleUpdate } from "./controllers/handleScheduleUpdate";
-import { handleSlotBooking } from "./controllers/handleSlotBooking";
 import { handleOnUserRegister } from "./controllers/handleUserRegister";
-import { handleMailScheduling } from "./controllers/handleMailScheduling";
-import { handleOnIncomingQueueMessg } from "./controllers/handleOnIncomingQueueMesaage";
-import { handleGetSchedule } from "./controllers/handleGetSchedule";
-import { handleGetMeetings } from "./controllers/handleGetMeetings";
 import { handleLogin } from "./controllers/handleLogin";
 
-const str = "postgresql://nikhilharisinghani26:IK7XE5LvhatP@ep-shy-forest-a1gcnxek.ap-southeast-1.aws.neon.tech/Project?sslmode=require"
+// import { handleScheduleUpdate } from "./controllers/handleScheduleUpdate";
+// import { handleSlotBooking } from "./controllers/handleSlotBooking";
+// import { handleMailScheduling } from "./controllers/handleMailScheduling";
+// import { handleOnIncomingQueueMessg } from "./controllers/handleOnIncomingQueueMesaage";
+// import { handleGetSchedule } from "./controllers/handleGetSchedule";
+// import { handleGetMeetings } from "./controllers/handleGetMeetings";
+// import { firstlogin } from "./db/schema";
+// import { eq } from "drizzle-orm";
+
+const str = "postgresql://nikhilharisinghani26:IK7XE5LvhatP@ep-shy-forest-a1gcnxek.ap-southeast-1.aws.neon.tech/Calendly-Clone?sslmode=require"
 
 const app = new Hono();
 const sql = neon(str);
@@ -19,25 +22,44 @@ const sql = neon(str);
 export const db = drizzle(sql);
 app.use('/*', cors());
 
-app.post('/login', async (c) => await handleLogin(c))
+app.get('/', (c) => c.text("Hello World"))
 
 app.post('/register-user', async (c) => await handleOnUserRegister(c))
 
-app.put('/update-schedule', async (c) => await handleScheduleUpdate(c))
+app.post('/login', async (c) => await handleLogin(c))
 
-app.post('/book-slot', async (c) => await handleSlotBooking(c));
+// app.use(async (c, next) => {
+// 	try {
+// 		const { email } = await c.req.json();
+// 		const sz = await db.select().from(firstlogin).where(eq(email, firstlogin.email));
+// 		if (sz.length) await next();
+// 		else {
+// 			return c.json({
+// 				"message": "User has not registered",
+// 				"success": false
+// 			})
+// 		}
+// 	} catch (error) {
+// 		return c.text("Not Authorized")
+// 	}
+// })
+
+//app.put('/update-schedule', async (c) => await handleScheduleUpdate(c))
+
+//app.post('/book-slot', async (c) => await handleSlotBooking(c));
 // error -> dont know how to authenticate gmail.com
-app.post('/schedule-mail', async (c) => await handleMailScheduling(c));
+//app.post('/schedule-mail', async (c) => await handleMailScheduling(c));
 // recieves message from queue 
-app.post('/', async (ctx) => await handleOnIncomingQueueMessg(ctx))
+//app.post('/', async (ctx) => await handleOnIncomingQueueMessg(ctx))
 
-app.get('/get-schedule', async (ctx) => await handleGetSchedule(ctx));
+//app.get('/get-schedule', async (ctx) => await handleGetSchedule(ctx));
 
-app.get('/get-meetings', async (ctx) => await handleGetMeetings(ctx))
+//app.get('/get-meetings', async (ctx) => await handleGetMeetings(ctx))
 
 app.notFound((c) => {
 	return c.text("Not Found");
 })
+
 export default app;
 
 

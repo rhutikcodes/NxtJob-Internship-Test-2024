@@ -11,7 +11,7 @@ function doTimeIntervalsIntersect(interval1: [string, string], interval2: [strin
     // Check for intersection
     return start1 <= end2 && end1 >= start2;
 }
-
+// event id 
 export async function handleSlotBooking(e: Context) {
     const { emailTo, emailFrom, meetStart, meetEnd, date }: {
         emailTo: string,
