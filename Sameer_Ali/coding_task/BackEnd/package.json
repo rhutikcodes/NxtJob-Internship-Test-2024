@@ -1,0 +1,29 @@
+{
+  "name": "back-end",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "db:generate": "drizzle-kit generate:pg --schema=./src/db/schema.ts",
+    "db:migrate": "tsx ./src/db/migrate.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "dotenv": "^16.4.4",
+    "drizzle-kit": "^0.20.14",
+    "tsx": "^4.7.1",
+    "typescript": "^5.0.4",
+    "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.8.1",
+    "@tsndr/cloudflare-worker-jwt": "^2.5.1",
+    "@upstash/qstash": "^2.3.0",
+    "drizzle-orm": "^0.29.3",
+    "hono": "^4.0.4",
+    "jsonwebtoken": "^9.0.2",
+    "resend": "^3.2.0"
+  }
+}
