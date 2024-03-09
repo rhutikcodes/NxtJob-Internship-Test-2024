@@ -19,17 +19,17 @@ app.use('/*', cors());
 
 app.get('/', (c) => c.text("Hello World"))
 
-app.post('/register-user', async (c) => await handleOnUserRegister(c))
+app.post('/register-user', async (c) => await handleOnUserRegister(c)); // Integration done
 
-app.post('/login', async (c) => await handleLogin(c))
+app.post('/login', async (c) => await handleLogin(c)) // Integration Done
 
-app.put('/updateWeeklyschedule', async (c) => await handleWeeklyScheduleUpdate(c))
+app.put('/updateWeeklyschedule', async (c) => await handleWeeklyScheduleUpdate(c)); //Integration Done
 
-app.get('/getWeeklyschedule', async (ctx) => await handleGetWeeklySchedule(ctx));
+app.get('/getWeeklyschedule', async (ctx) => await handleGetWeeklySchedule(ctx)); // Integration Done
 
 app.post('/bookSlot', async (c) => await handleSlotBooking(c));
 
-app.post('/', async (ctx) => await handleUpstashQueueMessage(ctx))
+app.post('/', async (ctx) => await handleUpstashQueueMessage(ctx)) // changes to be made
 
 
 app.notFound((c) => {

@@ -14,7 +14,15 @@ type Payload = {
 
 export async function handleWeeklyScheduleUpdate(ctx: Context) {
     try {
-        const { token, payload }: { token: string, payload: Payload } = await ctx.req.json();
+        const { payload }: { payload: Payload } = await ctx.req.json();
+        const token = ctx.req.header('Authorization')
+
+        if (typeof (token) === "undefined")
+            return ctx.json({
+                "message": "Token not provided",
+                "success": false
+            })
+
         const isValidToken = await jwt.verify(token, publicKey, "RS256");
         const decodedToken: any = jwt.decode(token)
         const userId = decodedToken.payload.sub;

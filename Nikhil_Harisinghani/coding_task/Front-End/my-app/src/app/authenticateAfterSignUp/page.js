@@ -10,6 +10,7 @@ export default function page() {
     const { user } = useUser()
     const router = useRouter()
     const { signOut } = useClerk();
+
     const handleOnClickSubmit = async () => {
 
         const response = await fetch('http://localhost:8787/register-user', {

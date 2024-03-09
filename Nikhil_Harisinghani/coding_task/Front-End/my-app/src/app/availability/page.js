@@ -1,5 +1,7 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useAuth } from "@clerk/nextjs";
+
 const daysofWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 const btnClass = {
@@ -10,7 +12,7 @@ const btnClass = {
 };
 
 export default function page() {
-
+    const { getToken } = useAuth()
     const [availability, setAvailability] = useState({
         'MON': ["00:00", "17:00", true],
         'TUE': ["01:00", "17:00", true],
@@ -34,7 +36,45 @@ export default function page() {
         setAvailability(updateFunction);
     }
 
-    // useEffect -> fetch
+    useEffect(() => {
+        async function getTiming() {
+            try {
+                const token = await getToken();
+                fetch('http://127.0.0.1:8787/getWeeklyschedule', {
+                    headers: {
+                        'Authorization': `${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    method: "GET"
+                }).then(async (data) => await data.json()).then((data) => {
+                    console.log(data.respPayload)
+                    setAvailability(data.respPayload);
+                })
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        getTiming();
+    }, [])
+
+    const handleOnClick = async () => {
+        const token = await getToken();
+        fetch('http://127.0.0.1:8787/updateWeeklyschedule', {
+            method: "PUT",
+            body: JSON.stringify({
+                payload: availability
+            }),
+            headers: {
+                'Authorization': token
+            }
+        }).then(async (data) => {
+            return await data.json()
+        }).then((data) => {
+            confirm(data.success);
+        })
+    }
 
     return (
         <div className='w-[75vw] h-[74vh] m-auto mt-[10vh] rounded-xl shadow-xl flex flex-row p-8'>
@@ -46,35 +86,24 @@ export default function page() {
 
                 <div className='grow mt-10'>
                     {
-                        daysofWeek.map((day) => {
+                        daysofWeek.map((day, idx) => {
                             return (
-                                <Comp day={day}
+                                <Comp
+                                    day={day}
                                     dayAvailability={availability[day]}
                                     handleAvailabilityUpdate={handleAvailabilityUpdate}
+                                    key={idx}
                                 />)
                         })
                     }
                 </div>
 
                 <div>
-                    <button style={btnClass}> Update </button>
+                    <button style={btnClass} onClick={handleOnClick}> Update </button>
                 </div>
             </div>
 
-            <div className='w-[50%] pl-8'>
-
-                <h1 className='text-2xl font-bold pt-7'>
-                    Date-specific hours
-                </h1>
-
-                <div className="mt-[2vh] text-gray-500">
-                    Override your availability for specific dates when your hours differ from your regular weekly hours.
-                </div>
-
-                <div className="mt-[1vh] rounded-xl border border-gray-800 w-[40%] pl-[10px] pr-[8px] text-sm pt-[2px] pb-[2px] cursor-pointer">
-                    Add Date Specific Hours
-                </div>
-            </div>
+            <Comp2 />
 
         </div>
     )
@@ -86,7 +115,7 @@ function Comp({ day, dayAvailability, handleAvailabilityUpdate }) {
         <div className='flex flex-row items-center mb-5'>
 
             <input type="checkbox"
-                class="appearance-none w-4 h-4 border border-gray-300 rounded-md bg-white checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                className="appearance-none w-4 h-4 border border-gray-300 rounded-md bg-white checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
                 onChange={() => { handleAvailabilityUpdate(day, 2) }}
                 {...(dayAvailability[2] && { checked: true })}
             />
@@ -123,4 +152,22 @@ function Comp({ day, dayAvailability, handleAvailabilityUpdate }) {
 
         </div>
     )
+}
+
+function Comp2() {
+    return (
+        <div className='w-[50%] pl-8'>
+
+            <h1 className='text-2xl font-bold pt-7'>
+                Date-specific hours
+            </h1>
+
+            <div className="mt-[2vh] text-gray-500">
+                Override your availability for specific dates when your hours differ from your regular weekly hours.
+            </div>
+
+            <div className="mt-[1vh] rounded-xl border border-gray-800 w-[40%] pl-[10px] pr-[8px] text-sm pt-[2px] pb-[2px] cursor-pointer">
+                Add Date Specific Hours
+            </div>
+        </div>)
 }
