@@ -37,26 +37,3 @@ app.notFound((c) => {
 })
 
 export default app;
-
-
-
-// app.use(async (c, next) => {
-// 	try {
-// 		const { email } = await c.req.json();
-// 		const sz = await db.select().from(firstlogin).where(eq(email, firstlogin.email));
-// 		if (sz.length) await next();
-// 		else {
-// 			return c.json({
-// 				"message": "User has not registered",
-// 				"success": false
-// 			})
-// 		}
-// 	} catch (error) {
-// 		return c.text("Not Authorized")
-// 	}
-// })
-
-// recieves message from queue 
-
-
-//app.get('/get-meetings', async (ctx) => await handleGetMeetings(ctx))
