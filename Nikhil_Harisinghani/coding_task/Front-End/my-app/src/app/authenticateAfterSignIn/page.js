@@ -14,7 +14,7 @@ export default function page() {
         async function handleLogin() {
             try {
                 const token = await getToken()
-                if (token === null) throw new Error("err");
+                if (token === null) throw new Error("error occured");
                 const resp = await fetch('http://localhost:8787/login', {
                     method: "POST",
                     body: JSON.stringify({

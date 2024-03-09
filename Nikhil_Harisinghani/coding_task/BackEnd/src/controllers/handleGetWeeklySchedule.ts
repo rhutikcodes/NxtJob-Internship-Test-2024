@@ -5,17 +5,17 @@ import { users, userWeeklyAvailability } from "../db/schema";
 import { db } from "..";
 import { eq } from "drizzle-orm";
 
-const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'] as const;
+// const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'] as const;
 
 export async function handleGetWeeklySchedule(ctx: Context) {
 
     try {
-        const { token, date } = await ctx.req.json();
-        const dayOfBooking: typeof days[number] = days[new Date(date).getDay()]
+        const { token } = await ctx.req.json();
+        // const dayOfBooking: typeof days[number] = days[new Date(date).getDay()]
         const isValidToken = await jwt.verify(token, publicKey, "RS256");
         const decodedToken: any = jwt.decode(token)
         const userId = decodedToken.payload.sub;
-        // add valid token if
+
         if (isValidToken === false) {
             return ctx.json({
                 "Message": "Invalid Token",
@@ -33,17 +33,12 @@ export async function handleGetWeeklySchedule(ctx: Context) {
                 )
             )
 
-        const availableFrom = availabilityOfUserOnThatDay[0].userWeeklyAvailability[`${dayOfBooking}from`];
-        const availableTill = availabilityOfUserOnThatDay[0].userWeeklyAvailability[`${dayOfBooking}till`];
-
-        console.log(availableFrom);
-        console.log(availableTill);
+        const weeklyAvailablility = availabilityOfUserOnThatDay[0].userWeeklyAvailability
 
         return ctx.json({
             "message": "Success",
             "success": true,
-            availableFrom,
-            availableTill
+            weeklyAvailablility
         })
 
     } catch (error) {
