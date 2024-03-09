@@ -10,10 +10,10 @@ const splitPem = pem_key?.match(/.{1,64}/g) ?? [];
 const publicKey = "-----BEGIN PUBLIC KEY-----\n" + splitPem.join("\n") + "\n-----END PUBLIC KEY-----";
 
 
-export async function handleLogin(c: Context) {
+export async function handleLogin(ctx: Context) {
 
     try {
-        const { token } = await c.req.json();
+        const { token } = await ctx.req.json();
         // console.log(token);
         const isValidToken = await jwt.verify(token, publicKey, "RS256");
         const decodedToken: any = jwt.decode(token)
@@ -27,14 +27,14 @@ export async function handleLogin(c: Context) {
 
             if (checkUserExistsOrNot.length > 0) {
 
-                return c.json({
+                return ctx.json({
                     "message": "User Exists",
                     "success": true
                 })
 
             } else {
 
-                return c.json({
+                return ctx.json({
                     "message": "User does not Exists",
                     "success": false,
                     "redirect": 'sign-up'
@@ -44,7 +44,7 @@ export async function handleLogin(c: Context) {
 
         } else {
 
-            return c.json({
+            return ctx.json({
                 "message": "Token Expired or Invalid Token",
                 "success": false,
                 "redirect": 'sign-in'
@@ -54,8 +54,8 @@ export async function handleLogin(c: Context) {
 
     } catch (error) {
 
-        c.status(500);
-        return c.json({
+        ctx.status(500);
+        return ctx.json({
             "message": "Internal Server Error",
             "success": true,
             "redirect": '/'

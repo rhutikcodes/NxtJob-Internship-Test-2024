@@ -1,11 +1,12 @@
+// Required
 import { Context } from "hono";
 import { Resend } from 'resend';
 import { Receiver } from '@upstash/qstash';
 const resend = new Resend('re_fcxPRKcm_MEPjvA4V7iwCp2ik5na1wpcT');
 
 // ##REQUIRED FOR SENDING
-const QSTASH_URL = "https://qstash.upstash.io/v2/publish/"
-const QSTASH_TOKEN = "eyJVc2VySUQiOiI1OTUxYjBkNy1iZjdkLTQ3MDYtOGExZC1kNzA4YmJkNjVjOGQiLCJQYXNzd29yZCI6Ijk5MzZjNGNhYWM3NzQxOTRiOThlNTkyZWUzYjQ2YTE2In0="
+// const QSTASH_URL = "https://qstash.upstash.io/v2/publish/"
+// const QSTASH_TOKEN = "eyJVc2VySUQiOiI1OTUxYjBkNy1iZjdkLTQ3MDYtOGExZC1kNzA4YmJkNjVjOGQiLCJQYXNzd29yZCI6Ijk5MzZjNGNhYWM3NzQxOTRiOThlNTkyZWUzYjQ2YTE2In0="
 
 // ##REQUIRED FOR RECEIVING
 const QSTASH_CURRENT_SIGNING_KEY = "sig_5bV9wPsyi6Ckd3f48W5tRijSTyX9"
@@ -16,13 +17,14 @@ const c = new Receiver({
     nextSigningKey: QSTASH_NEXT_SIGNING_KEY,
 });
 
-export async function handleOnIncomingQueueMessg(ctx: Context) {
+export async function handleUpstashQueueMessage(ctx: Context) {
     try {
         const signatureHeader = ctx.req.header('Upstash-Signature');
-        await ctx.req.json().then((d) => console.log(d)).catch(e => console.log(e));
+        // await ctx.req.json().then((d) => console.log(d)).catch(e => console.log(e));
         const body: { from: string, to: string } = await ctx.req.json();
         console.log("I am in!");
         console.log(body);
+
         if (typeof (signatureHeader) === "string") {
             // Issue is gmail.com is not allowed
             // const isValid = await c.verify({
@@ -39,8 +41,8 @@ export async function handleOnIncomingQueueMessg(ctx: Context) {
             const result = await resend.emails.send({
                 from: `onboarding@resend.dev`,
                 to: `${body.to}`,
-                subject: 'Hello World',
-                html: '<strong>It works!</strong>',
+                subject: 'Reminder',
+                html: '<strong>Meeting within 15mins</strong>',
             });
 
             // cannot sendfrom gmail.com domain 

@@ -1,118 +1,211 @@
-import { Context } from "hono"
+// Google API integration remaining
+import { Context } from "hono";
 import { db } from "..";
-import { userAvailability, userBookedSlots } from "../db/schema";
-import { and, eq } from "drizzle-orm";
-const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+import { userBookedSlots, users } from "../db/schema";
+import { eq } from "drizzle-orm";
+import { handleMailScheduling } from "./handleMailScheduling";
 
-function doTimeIntervalsIntersect(interval1: [string, string], interval2: [string, string]): boolean {
-    const [start1, end1] = interval1.map(time => new Date(`1970-01-01T${time}`));
-    const [start2, end2] = interval2.map(time => new Date(`1970-01-01T${time}`));
+function getEndTime(time: string) {
+    let temp = Number(time.split(':')[0]) * 3600 + Number(time.split(':')[1]) * 60 + 30 * 60;
+    let hrs = Math.floor(temp / 3600);
+    let mins = (temp % 3600) / 60;
+    // console.log(temp);
 
-    // Check for intersection
-    return start1 <= end2 && end1 >= start2;
-}
-// event id 
-export async function handleSlotBooking(e: Context) {
-    const { emailTo, emailFrom, meetStart, meetEnd, date }: {
-        emailTo: string,
-        emailFrom: string,
-        meetStart: string,
-        meetEnd: string,
-        date: string
-    } = await e.req.json();
+    let finalhrs: string;
+    let finalmins: string;
+    if (hrs < 10) finalhrs = "0" + hrs.toString()
+    else finalhrs = hrs.toString();
 
-    // 1 -> check availability for both on that day
-    const userTo = await db.select().from(userAvailability).where(and(
-        eq(userAvailability.email, emailTo),
-        eq(userAvailability.avail, date)
-    ))
+    // console.log(finalhrs);
 
-    if (userTo.length) {
-        if (userTo[0].isAvail === false) {
-            return e.json({
-                "Message": "Other User is On Leave",
-                "success": false
-            })
-        }
-    } else {
-        const specificDate = new Date(date);
-        const dayName = daysOfWeek[specificDate.getDay()];
-        if (dayName === daysOfWeek[0] || dayName === daysOfWeek[6]) {
-            return e.json({
-                "Message": "Other User is not free",
-                "success": false
-            })
-        }
-    }
+    if (mins < 10) finalmins = "0" + mins.toString()
+    else finalmins = mins.toString()
 
-
-    // 2 -> check wether slot is free or not
-    const userToBooking = await db.select().from(userBookedSlots).where(and(
-        eq(userBookedSlots.email, emailTo),
-        eq(userBookedSlots.bookedDate, date)
-    ))
-
-    let isUserToFree: boolean = true;
-
-    userToBooking.forEach((ele) => {
-        if (doTimeIntervalsIntersect([meetStart, meetEnd], [ele.bookedFrom, ele.bookedTill])) {
-            isUserToFree = false;
-        }
-    })
-
-    if (!isUserToFree) {
-        return e.json({
-            "Message": "Other User is not free",
-            "success": false
-        })
-    }
-
-    const userFromBooking = await db.select().from(userBookedSlots).where(and(
-        eq(userBookedSlots.email, emailFrom),
-        eq(userBookedSlots.bookedDate, date)
-    ))
-
-    let isUserFromFree: boolean = true;
-    userFromBooking.forEach((ele) => {
-        if (doTimeIntervalsIntersect([meetStart, meetEnd], [ele.bookedFrom, ele.bookedTill])) {
-            isUserFromFree = false;
-        }
-    })
-
-    if (!isUserFromFree) {
-        return e.json({
-            "Message": "You are not free",
-            "success": false
-        })
-    }
-    await db.insert(userBookedSlots).values({ email: emailFrom, bookedFrom: meetStart, bookedTill: meetEnd, bookedDate: date })
-    await db.insert(userBookedSlots).values({ email: emailTo, bookedFrom: meetStart, bookedTill: meetEnd, bookedDate: date })
-    return e.json({
-        "message": "Meeting scheduled",
-        "success": true
-    })
+    const endTime = finalhrs + ":" + finalmins + ":00";
+    console.log(endTime);
+    return endTime;
 }
 
-// Wont be required if user cannot set meetings on holiday
-// const userFrom = await db.select().from(userAvailability).where(and(
-//     eq(userAvailability.email, emailFrom),
-//     eq(userAvailability.avail, date)
-// ))
+export async function handleSlotBooking(ctx: Context) {
+    try {
+        const { payload }:
+            { payload: { date: string, startTime: string, clientEmailId: string, slug: string } }
+            = await ctx.req.json();
 
-// if (userFrom.length) {
-//     if (userFrom[0].isAvail === false) {
-//         return e.json({
-//             "Message": "You are not free",
-//             "success": false
-//         })
-//     }
-// } else {
-//     const specificDate = new Date(date);
-//     const dayName = daysOfWeek[specificDate.getDay()];
-//     if (dayName === daysOfWeek[0] || dayName === daysOfWeek[6]) {
-//         return e.json({
-//             "Message": "You are not free",
-//             "success": false
-//         })
-//     }
-// }
+        const emailId = await db.select().from(users).where(eq(users.slug, payload.slug));
+        
+        if (emailId.length === 0) 
+            return ctx.json({
+                "message": "User does not exist"
+            })
+        
+        const userId = emailId[0].userId;
+
+        const slotsBookedOnThatDay = await db.select().from(userBookedSlots).innerJoin(users,eq(userBookedSlots.userId,users.userId)).where(eq(userBookedSlots.bookedDate, payload.date));
+                
+        const endTime = getEndTime(payload.startTime);
+        let isFeasible: boolean = true
+                
+        slotsBookedOnThatDay.forEach((tuple) => {
+            if (payload.startTime === tuple.userBookedSlots.startTime) {
+                isFeasible = false
+            }
+        })
+        
+        if (!isFeasible) {
+            return ctx.json({
+                "message": "User not busy",
+                "success": true
+            })
+        }
+
+        await db.insert(userBookedSlots).values({
+            userId,
+            startTime: payload.startTime,
+            endTime,
+            clientEmailId: payload.clientEmailId,
+            bookedDate: payload.date
+        })
+            
+            
+        // google api TO DO will also need to handle 
+            
+        await handleMailScheduling(emailId[0].email, payload.clientEmailId, payload.date, payload.startTime);
+            
+        return ctx.json({
+            "message": "successfull"
+        })
+            
+        } catch (error) {
+            console.log(error);
+            
+            return ctx.json({
+                "message": "Something went wrong",
+                "sucess": true
+            })
+
+    }
+}
+
+
+// later
+// function doIntervalsIntersect(start1: string, end1: string, start2: string, end2: string) {
+    //     const startTime1 = new Date(`1970-01-01T${start1}Z`);
+    //     const endTime1 = new Date(`1970-01-01T${end1}Z`);
+    //     const startTime2 = new Date(`1970-01-01T${start2}Z`);
+    //     const endTime2 = new Date(`1970-01-01T${end2}Z`);
+    
+    //     const intersect = !(endTime1 < startTime2 || startTime1 > endTime2);
+    
+    //     return intersect;
+    // }
+    
+    
+    // const fs = require('fs').promises;
+    // const path = require('path');
+    // const process = require('process');
+    // const { authenticate } = require('@google-cloud/local-auth');
+    // const { google } = require('googleapis');
+    
+    // // If modifying these scopes, delete token.json.
+    // const SCOPES = ['https://www.googleapis.com/auth/calendar'];
+    // // The file token.json stores the user's access and refresh tokens, and is
+    // // created automatically when the authorization flow completes for the first
+    // // time.
+    // const TOKEN_PATH = path.join(process.cwd(), 'token.json');
+    // const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
+    
+    // /**
+    //  * Reads previously authorized credentials from the save file.
+    //  *
+    //  * @return {Promise<OAuth2Client|null>}
+    //  */
+    // async function loadSavedCredentialsIfExist() {
+        //     try {
+            //         const content = await fs.readFile(TOKEN_PATH);
+            //         const credentials = JSON.parse(content);
+            //         console.log(credentials);
+            //         return google.auth.fromJSON(credentials);
+            //     } catch (err) {
+                //         return null;
+                //     }
+                // }
+                
+                // /**
+                //  * Serializes credentials to a file compatible with GoogleAuth.fromJSON.
+                //  *
+                //  * @param {OAuth2Client} client
+                //  * @return {Promise<void>}
+                //  */
+// async function saveCredentials(client) {
+//     const content = await fs.readFile(CREDENTIALS_PATH);
+//     const keys = JSON.parse(content);
+//     const key = keys.installed || keys.web;
+//     const payload = JSON.stringify({
+    //         type: 'authorized_user',
+    //         client_id: key.client_id,
+    //         client_secret: key.client_secret,
+    //         refresh_token: client.credentials.refresh_token,
+    //     });
+    //     await fs.writeFile(TOKEN_PATH, payload);
+    // }
+    
+    // /**
+    //  * Load or request or authorization to call APIs.
+    //  *
+    //  */
+    // async function authorize() {
+        //     let client = await loadSavedCredentialsIfExist();
+        //     console.log(client)
+        //     if (client) {
+            //         return client;
+            //     }
+            //     client = await authenticate({
+                //         scopes: SCOPES,
+                //         keyfilePath: CREDENTIALS_PATH,
+                //     });
+                //     if (client.credentials) {
+                    //         await saveCredentials(client);
+                    //     }
+                    //     return client;
+                    // }
+                    
+                    // /**
+                    //  * Lists the next 10 events on the user's primary calendar.
+                    //  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+                    //  */
+                    // async function listEvents(auth) {
+                        //     const calendar = google.calendar({ version: 'v3', auth });
+                        //     const res = await calendar.events.list({
+                            //         calendarId: 'primary',
+                            //         timeMin: new Date().toISOString(),
+                            //         maxResults: 10,
+                            //         singleEvents: true,
+                            //         orderBy: 'startTime',
+//     });
+//     const events = res.data.items;
+//     if (!events || events.length === 0) {
+    //         console.log('No upcoming events found.');
+    //         return;
+    //     }
+    //     console.log('Upcoming 10 events:');
+    //     events.map((event, i) => {
+        //         const start = event.start.dateTime || event.start.date;
+        //         console.log(`${start} - ${event.summary}`);
+        //     });
+        // }
+        
+        // authorize().then(listEvents).catch(console.error);
+        // // send token from front-end 
+
+
+// Not needed
+  // const isValidToken = await jwt.verify(token, publicKey, "RS256");
+        // const decodedToken: any = jwt.decode(token)
+        // const userId = decodedToken.payload.sub;
+        
+        // if (isValidToken === false)
+        //     return ctx.json({
+        //         "message": "Token Invalid/Expired",
+        //         "succes": false
+//     })

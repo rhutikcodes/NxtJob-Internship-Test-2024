@@ -5,8 +5,22 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1709058578265,
-      "tag": "0000_known_nextwave",
+      "when": 1709798865679,
+      "tag": "0000_third_firedrake",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709820248216,
+      "tag": "0001_fast_maverick",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709824835687,
+      "tag": "0002_windy_northstar",
       "breakpoints": true
     }
   ]

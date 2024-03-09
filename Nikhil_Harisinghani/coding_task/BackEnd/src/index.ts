@@ -4,15 +4,10 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
 import { handleOnUserRegister } from "./controllers/handleUserRegister";
 import { handleLogin } from "./controllers/handleLogin";
-
-// import { handleScheduleUpdate } from "./controllers/handleScheduleUpdate";
-// import { handleSlotBooking } from "./controllers/handleSlotBooking";
-// import { handleMailScheduling } from "./controllers/handleMailScheduling";
-// import { handleOnIncomingQueueMessg } from "./controllers/handleOnIncomingQueueMesaage";
-// import { handleGetSchedule } from "./controllers/handleGetSchedule";
-// import { handleGetMeetings } from "./controllers/handleGetMeetings";
-// import { firstlogin } from "./db/schema";
-// import { eq } from "drizzle-orm";
+import { handleWeeklyScheduleUpdate } from "./controllers/handleWeeklyScheduleUpdate";
+import { handleGetWeeklySchedule } from "./controllers/handleGetWeeklySchedule";
+import { handleSlotBooking } from "./controllers/handleSlotBooking";
+import { handleUpstashQueueMessage } from "./controllers/handleOnIncomingQueueMesaage";
 
 const str = "postgresql://nikhilharisinghani26:IK7XE5LvhatP@ep-shy-forest-a1gcnxek.ap-southeast-1.aws.neon.tech/Calendly-Clone?sslmode=require"
 
@@ -27,6 +22,23 @@ app.get('/', (c) => c.text("Hello World"))
 app.post('/register-user', async (c) => await handleOnUserRegister(c))
 
 app.post('/login', async (c) => await handleLogin(c))
+
+app.put('/updateWeeklyschedule', async (c) => await handleWeeklyScheduleUpdate(c))
+
+app.get('/getWeeklyschedule', async (ctx) => await handleGetWeeklySchedule(ctx));
+
+app.post('/bookSlot', async (c) => await handleSlotBooking(c));
+
+app.post('/', async (ctx) => await handleUpstashQueueMessage(ctx))
+
+
+app.notFound((c) => {
+	return c.text("Not Found");
+})
+
+export default app;
+
+
 
 // app.use(async (c, next) => {
 // 	try {
@@ -44,38 +56,7 @@ app.post('/login', async (c) => await handleLogin(c))
 // 	}
 // })
 
-//app.put('/update-schedule', async (c) => await handleScheduleUpdate(c))
-
-//app.post('/book-slot', async (c) => await handleSlotBooking(c));
-// error -> dont know how to authenticate gmail.com
-//app.post('/schedule-mail', async (c) => await handleMailScheduling(c));
 // recieves message from queue 
-//app.post('/', async (ctx) => await handleOnIncomingQueueMessg(ctx))
 
-//app.get('/get-schedule', async (ctx) => await handleGetSchedule(ctx));
 
 //app.get('/get-meetings', async (ctx) => await handleGetMeetings(ctx))
-
-app.notFound((c) => {
-	return c.text("Not Found");
-})
-
-export default app;
-
-
-// // ##### TODO #####
-// ## Functionality
-/*
-	1. Calculate Delay -> done look up DelayClaculation
-	2. Update Availability On userCreation or login (i.e take current date check if there is a record if not initialize it ) 
-	3. Implement Notification System (use queue only) -> research
-	4. check availability of both parties and add booking for both parties -> done (to be checked)
-*/
-
-
-/*
-DelayClaculation
-const currentDate = new Date();
-const targetDate = new Date('(Date)T(Time)');-> T in between is necesaary
-const timeDifferenceInSeconds = Math.floor((targetDate - currentDate) / 1000);->ans
-*/

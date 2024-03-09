@@ -1,113 +1,126 @@
 "use client"
-import { useUser, useAuth } from "@clerk/nextjs"
-import { useEffect, useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
+import { useState } from "react"
+const daysofWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
-const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const initialSchedule = {
-    from: 9,
-    to: 5,
+const btnClass = {
+    backgroundColor: "#f00",
+    borderColor: "#d00",
+    borderRadius: "5px",
+    padding: "5px 10px",
 };
 
-
-
 export default function page() {
-    const { userId, getToken } = useAuth()
-    const { user } = useUser();
-    const [date, setDate] = useState(new Date());
-    // const [email, setEmail] = useState("");
-    // const [schedule, setSchedule] = useState({});
 
-    // Initialize the schedule
-    // useEffect(() => {
-    //     const initialScheduleObj = {};
-    //     daysOfWeek.forEach((day) => {
-    //         if (day === 'Sat' || day === 'Sun') {
-    //             initialScheduleObj[`from${day}`] = 'unavailable';
-    //             initialScheduleObj[`to${day}`] = 'unavailable';
-    //         } else {
-    //             initialScheduleObj[`from${day}`] = initialSchedule.from;
-    //             initialScheduleObj[`to${day}`] = initialSchedule.to;
-    //         }
-    //     });
-    //     setSchedule(initialScheduleObj);
-    // }, []);
+    const [availability, setAvailability] = useState({
+        'MON': ["00:00", "17:00", true],
+        'TUE': ["01:00", "17:00", true],
+        'WED': ["02:00", "17:00", true],
+        'THU': ["03:00", "17:00", true],
+        'FRI': ["04:00", "17:00", true],
+        'SAT': ["05:00", "17:00", false],
+        'SUN': ["06:00", "17:00", false]
+    })
 
+    function handleAvailabilityUpdate(day, updateIdx, value) {
+        const updateFunction = (prevState) => ({
+            ...prevState,
+            [day]: [
+                updateIdx === 0 ? value : prevState[day][0],
+                updateIdx === 1 ? value : prevState[day][1],
+                updateIdx === 2 ? !prevState[day][2] : prevState[day][2]
+            ],
+        });
 
-    // useEffect(() => {
-    //     // console.log(user?.emailAddresses[0]?.emailAddress);
-    //     if (user?.emailAddresses[0]?.emailAddress) setEmail(user.emailAddresses[0].emailAddress);
-    // }, [user?.emailAddresses])
+        setAvailability(updateFunction);
+    }
 
-    // useEffect(() => {
-    //     console.log(userId);
-    //     console.log(user);
-    // }, [])
-
-    // useEffect(() => {
-    //     console.log("Toggle");
-    // }, [date])
+    // useEffect -> fetch
 
     return (
-        <div>
-            <h1 className="font-extrabold text-4xl ml-10 mb-10">Availability</h1>
+        <div className='w-[75vw] h-[74vh] m-auto mt-[10vh] rounded-xl shadow-xl flex flex-row p-8'>
 
-            {/* <div className="flex justify-center items-center">
-                <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border p-8"
-                />
-            </div> */}
+            <div className='w-[50%] border-r border-black border-r-1 flex flex-col'>
+                <h1 className='text-2xl font-bold pt-7'>
+                    Weekly Hours
+                </h1>
+
+                <div className='grow mt-10'>
+                    {
+                        daysofWeek.map((day) => {
+                            return (
+                                <Comp day={day}
+                                    dayAvailability={availability[day]}
+                                    handleAvailabilityUpdate={handleAvailabilityUpdate}
+                                />)
+                        })
+                    }
+                </div>
+
+                <div>
+                    <button style={btnClass}> Update </button>
+                </div>
+            </div>
+
+            <div className='w-[50%] pl-8'>
+
+                <h1 className='text-2xl font-bold pt-7'>
+                    Date-specific hours
+                </h1>
+
+                <div className="mt-[2vh] text-gray-500">
+                    Override your availability for specific dates when your hours differ from your regular weekly hours.
+                </div>
+
+                <div className="mt-[1vh] rounded-xl border border-gray-800 w-[40%] pl-[10px] pr-[8px] text-sm pt-[2px] pb-[2px] cursor-pointer">
+                    Add Date Specific Hours
+                </div>
+            </div>
 
         </div>
     )
 }
 
-// <div className="flex">
-//     <div className="bg-gray-100 w-96">
-//         <div className="w-4/5 m-auto pt-5 pb-5">
+function Comp({ day, dayAvailability, handleAvailabilityUpdate }) {
 
-//             {
-//                 Object.keys(schedule).length
-//                 &&
-//                 daysOfWeek.map((ele, idx) => {
-//                     return (
-//                         <Component
-//                             key={ele}
-//                             day={ele}
-//                             setSchedule={setSchedule}
-//                             from={schedule[`from${ele}`]}
-//                             to={schedule[`to${ele}`]}
-//                         />
-//                     )
-//                 })
-//             }
-
-//         </div>
-//     </div>
-// </div>
-function Component(props) {
-    const { from, to, setSchedule, day } = props;
     return (
-        <div className="grid grid-cols-3 gap-2 items-center text-black  pb-2 pt-2 w-60 pl-10 pr-10 border-2 border-black m-3">
-            <div>
+        <div className='flex flex-row items-center mb-5'>
+
+            <input type="checkbox"
+                class="appearance-none w-4 h-4 border border-gray-300 rounded-md bg-white checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                onChange={() => { handleAvailabilityUpdate(day, 2) }}
+                {...(dayAvailability[2] && { checked: true })}
+            />
+
+
+            <h1 className='text-2xl font-bold ml-6 w-[50px]'>
                 {day}
-            </div>
+            </h1>
+
             {
-                from === "unavailable" ?
-                    <span>
-                        unavailable
-                    </span>
+                dayAvailability[2] ?
+                    <>
+                        <div className="pl-[3vw] pr-[0.5vw]">
+                            <input type='time' className='border border-gray-800 w-[8vw] rounded-md'
+                                value={dayAvailability[0]}
+                                onChange={(e) => { handleAvailabilityUpdate(day, 0, e.target.value) }}
+                            />
+                        </div>
+                        -
+                        <div className="pl-[0.5vw]">
+                            <input type='time' className='border border-gray-800 w-[8vw] rounded-md'
+                                value={dayAvailability[1]}
+                                onChange={(e) => { handleAvailabilityUpdate(day, 1, e.target.value) }}
+                            />
+                        </div>
+                    </>
                     :
-                    <div className="col-span-2 grid grid-cols-2 gap-2">
-                        <input type="number" className="border border-black w-full text-center" value={from} />
-                        <input type="number" className="border border-black w-full text-center" value={to} />
+                    <div className="pl-[3vw]">
+                        <h1 className='text-xl font-bold text-gray-500'>
+                            Unavailable
+                        </h1>
                     </div>
             }
 
         </div>
     )
 }
-

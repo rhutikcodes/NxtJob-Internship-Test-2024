@@ -1,6 +1,6 @@
 {
-  "id": "d94a6c9b-6709-48e4-8e04-e4723d658243",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "f407889e-2ee6-487b-85f8-d4ef18121382",
+  "prevId": "d94a6c9b-6709-48e4-8e04-e4723d658243",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -68,6 +68,66 @@
           "tableTo": "users",
           "columnsFrom": [
             "userId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "userBookedSlots": {
+      "name": "userBookedSlots",
+      "schema": "",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "clientUserId": {
+          "name": "clientUserId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bookedFrom": {
+          "name": "bookedFrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bookedTill": {
+          "name": "bookedTill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bookedDate": {
+          "name": "bookedDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "eventId": {
+          "name": "eventId",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userBookedSlots_email_users_userId_fk": {
+          "name": "userBookedSlots_email_users_userId_fk",
+          "tableFrom": "userBookedSlots",
+          "tableTo": "users",
+          "columnsFrom": [
+            "email"
           ],
           "columnsTo": [
             "userId"
