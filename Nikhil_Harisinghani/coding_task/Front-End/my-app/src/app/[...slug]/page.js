@@ -1,8 +1,10 @@
 "use client"
 import { useEffect, useRef, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
+import { useRouter } from 'next/navigation'
 
 export default function page({ params }) {
+    const router = useRouter();
     const [date, setDate] = useState(new Date());
     const a = useRef(false);
     const [adj, setAdj] = useState([]);
@@ -10,14 +12,24 @@ export default function page({ params }) {
 
     useEffect(() => {
 
-        console.log(date);
         if (a.current) {
-
-            setAdj((prev) => {
-                return [...prev, prev.length + 1]
+            console.log(params.slug[0])
+            fetch('http://localhost:8787/getAvailabilityOnADay', {
+                method: "POST",
+                body: JSON.stringify({
+                    slug: params.slug[0],
+                    date
+                })
+            }).then(async (data) => await data.json()).then((data) => {
+                // setAdj(adj);
+                console.log(data?.returnPayload)
+                setAdj(data?.returnPayload)
+            }).catch((err) => {
+                console.log(err)
             })
 
         }
+
     }, [date])
 
     useEffect(() => {
@@ -89,6 +101,7 @@ export default function page({ params }) {
                                     <div className="flex flex-col w-[22vw]">
                                         <h2 className="text-xl text-black-400/25">{params.slug[0]}</h2>
                                         <h1 className="text-3xl text-black-400/50">30 Min Meeting</h1>
+                                        <h2 className="text-xl text-black-400/25">Select Date and Time</h2>
                                     </div>
 
                                     <div>
@@ -100,16 +113,25 @@ export default function page({ params }) {
                                         />
                                     </div>
 
-                                    <div className="flex flex-col text-center flex-1 overflowy-auto">
+                                    <div className="flex flex-col text-center flex-1 overflow-y-auto pr-2">
                                         {
-                                            adj.map((ele) =>
-                                                <button className="bg-indigo-400 w-[85%] mx-auto mb-2" key={ele}>
-                                                    bbbbbbbbbbbbbbbb
+                                            adj.map((ele, idx) =>
+                                                <button className="border-double border-black border-2 w-[80px] mx-auto mb-2 p-2 pr-3 pl-3" key={idx}
+
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+                                                        console.log(formattedDate);
+                                                        console.log(e.currentTarget.innerHTML + ":00")
+                                                        console.log(params.slug[0]);
+
+                                                        router.push(`/form/${formattedDate}/${params.slug[0]}/${e.currentTarget.innerHTML}:00`);
+                                                    }}>
+                                                    {ele?.start}
                                                 </button>
                                             )
                                         }
                                     </div>
-
                                 </div>
                             </div>
 

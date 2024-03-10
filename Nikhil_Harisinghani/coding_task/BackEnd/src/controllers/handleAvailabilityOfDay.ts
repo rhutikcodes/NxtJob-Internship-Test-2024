@@ -66,8 +66,8 @@ export async function handleAvailabilityOfDay(ctx: Context) {
         const inputDate = new Date(date);
         let day = daysofWeek[inputDate.getDay()];
         const formattedDate = `${inputDate.getFullYear()}-${(inputDate.getMonth() + 1).toString().padStart(2, '0')}-${inputDate.getDate().toString().padStart(2, '0')}`;
-
-
+        console.log(slug);
+        console.log(date);
         const data = await db.select().from(users).innerJoin(userWeeklyAvailability,
             eq(userWeeklyAvailability.userId, users.userId)).where(eq(users.slug, slug));
 

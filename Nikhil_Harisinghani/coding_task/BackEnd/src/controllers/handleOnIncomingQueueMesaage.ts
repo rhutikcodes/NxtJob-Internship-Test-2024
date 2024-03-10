@@ -1,4 +1,4 @@
-// Required
+// Required -> use jwt library
 import { Context } from "hono";
 import { Resend } from 'resend';
 import { Receiver } from '@upstash/qstash';
@@ -21,26 +21,27 @@ export async function handleUpstashQueueMessage(ctx: Context) {
     try {
         const signatureHeader = ctx.req.header('Upstash-Signature');
         const body: string = await ctx.req.json();
-        console.log("I am in!");
+
         console.log(body);
+        console.log(signatureHeader);
 
+        // let temp = JSON.stringify(body),
         if (typeof (signatureHeader) === "string") {
-            const isValid = await c.verify({
-                body,
-                signature: signatureHeader,
-            })
+            // const isValid = await c.verify({
+            //     temp,
+            //     signature: signatureHeader,
+            // })
             // console.log(isValid);
-            //if (!isValid) throw new Error("Invalid")
-            ctx.status(200);
-            console.log(body);
-
 
             const result = await resend.emails.send({
                 from: `onboarding@resend.dev`,
-                to: `${body.to}`,
+                to: `nikhilharisinghani26@gmail.com`,
                 subject: 'Reminder',
                 html: '<strong>Meeting within 15mins</strong>',
             });
+
+            ctx.status(200);
+            console.log(body);
 
             if (result.error) {
                 console.error(result.error);
@@ -56,7 +57,7 @@ export async function handleUpstashQueueMessage(ctx: Context) {
             throw new Error();
         }
     } catch (error: any) {
-
+        console.log(error);
         if (error.message === "Invalid") {
             ctx.status(200);
             return ctx.json({
@@ -68,5 +69,6 @@ export async function handleUpstashQueueMessage(ctx: Context) {
         return ctx.json({
             "message": "Internal Server Error"
         })
+
     }
 }

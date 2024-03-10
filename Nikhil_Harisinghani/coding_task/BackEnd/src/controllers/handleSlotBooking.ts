@@ -39,23 +39,7 @@ export async function handleSlotBooking(ctx: Context) {
         
         const userId = emailId[0].userId;
 
-        // const slotsBookedOnThatDay = await db.select().from(userBookedSlots).innerJoin(users,eq(userBookedSlots.userId,users.userId)).where(eq(userBookedSlots.bookedDate, payload.date));
-                
         const endTime = getEndTime(payload.startTime);
-        // let isFeasible: boolean = true
-                
-        // slotsBookedOnThatDay.forEach((tuple) => {
-        //     if (payload.startTime === tuple.userBookedSlots.startTime) {
-        //         isFeasible = false
-        //     }
-        // })
-        
-        // if (!isFeasible) {
-        //     return ctx.json({
-        //         "message": "User busy",
-        //         "success": true
-        //     })
-        // }
 
         await db.insert(userBookedSlots).values({
             userId,
@@ -80,7 +64,7 @@ export async function handleSlotBooking(ctx: Context) {
             
             return ctx.json({
                 "message": "Something went wrong",
-                "sucess": true
+                "success": true
             })
 
     }
