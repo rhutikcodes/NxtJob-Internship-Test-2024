@@ -14,13 +14,13 @@ const btnClass = {
 export default function page() {
     const { getToken } = useAuth()
     const [availability, setAvailability] = useState({
-        'MON': ["00:00", "17:00", true],
-        'TUE': ["01:00", "17:00", true],
-        'WED': ["02:00", "17:00", true],
-        'THU': ["03:00", "17:00", true],
-        'FRI': ["04:00", "17:00", true],
-        'SAT': ["05:00", "17:00", false],
-        'SUN': ["06:00", "17:00", false]
+        'MON': ["09:00", "17:00", true],
+        'TUE': ["09:00", "17:00", true],
+        'WED': ["09:00", "17:00", true],
+        'THU': ["09:00", "17:00", true],
+        'FRI': ["09:00", "17:00", true],
+        'SAT': ["09:00", "17:00", false],
+        'SUN': ["09:00", "17:00", false]
     })
 
     function handleAvailabilityUpdate(day, updateIdx, value) {

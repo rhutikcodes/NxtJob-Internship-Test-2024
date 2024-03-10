@@ -8,6 +8,9 @@ import { handleWeeklyScheduleUpdate } from "./controllers/handleWeeklyScheduleUp
 import { handleGetWeeklySchedule } from "./controllers/handleGetWeeklySchedule";
 import { handleSlotBooking } from "./controllers/handleSlotBooking";
 import { handleUpstashQueueMessage } from "./controllers/handleOnIncomingQueueMesaage";
+import { handleUserExistsUsingSlug } from "./controllers/handleUserExistsUsingSlug";
+import { handleAvailabilityOfDay } from "./controllers/handleAvailabilityOfDay";
+import { users } from "./db/schema";
 
 const str = "postgresql://nikhilharisinghani26:IK7XE5LvhatP@ep-shy-forest-a1gcnxek.ap-southeast-1.aws.neon.tech/Calendly-Clone?sslmode=require"
 
@@ -17,20 +20,31 @@ const sql = neon(str);
 export const db = drizzle(sql);
 app.use('/*', cors());
 
-app.get('/', (c) => c.text("Hello World"))
+app.get('/', async (c) => {
+	await db.insert(users).values({
+		userId: "1",
+		email: "harisinghani",
+		slug: "h",
 
-app.post('/register-user', async (c) => await handleOnUserRegister(c)); // Integration done
+	})
+	return c.text("Hello World")
+})
 
-app.post('/login', async (c) => await handleLogin(c)) // Integration Done
+app.post('/register-user', handleOnUserRegister); // Integration done
 
-app.put('/updateWeeklyschedule', async (c) => await handleWeeklyScheduleUpdate(c)); //Integration Done
+app.post('/login', handleLogin) // Integration Done
 
-app.get('/getWeeklyschedule', async (ctx) => await handleGetWeeklySchedule(ctx)); // Integration Done
+app.put('/updateWeeklyschedule', handleWeeklyScheduleUpdate); //Integration Done
 
-app.post('/bookSlot', async (c) => await handleSlotBooking(c));
+app.get('/getWeeklyschedule', handleGetWeeklySchedule); // Integration Done
 
-app.post('/', async (ctx) => await handleUpstashQueueMessage(ctx)) // changes to be made
+app.post('/bookSlot', handleSlotBooking); // Finalized -> Format Date in Frontend and Google API integration
 
+app.post('/', handleUpstashQueueMessage) // changes to be made
+
+app.post('/userExist', handleUserExistsUsingSlug); // Integration Done
+
+app.post('/getAvailabilityOnADay', handleAvailabilityOfDay); // Finalized
 
 app.notFound((c) => {
 	return c.text("Not Found");

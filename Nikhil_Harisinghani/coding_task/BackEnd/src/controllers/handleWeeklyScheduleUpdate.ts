@@ -6,7 +6,7 @@ import { db } from "..";
 import jwt from '@tsndr/cloudflare-worker-jwt'
 import { eq } from "drizzle-orm";
 
-const daysofWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'] as const;
+export const daysofWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'] as const;
 type DayOfWeek = typeof daysofWeek[number];
 type Payload = {
     [Key in DayOfWeek]: [string, string, boolean];

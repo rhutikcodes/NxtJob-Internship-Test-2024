@@ -20,23 +20,20 @@ const c = new Receiver({
 export async function handleUpstashQueueMessage(ctx: Context) {
     try {
         const signatureHeader = ctx.req.header('Upstash-Signature');
-        // await ctx.req.json().then((d) => console.log(d)).catch(e => console.log(e));
-        const body: { from: string, to: string } = await ctx.req.json();
+        const body: string = await ctx.req.json();
         console.log("I am in!");
         console.log(body);
 
         if (typeof (signatureHeader) === "string") {
-            // Issue is gmail.com is not allowed
-            // const isValid = await c.verify({
-            // 	signature: signatureHeader,
-            // 	body
-            // })
-            //console.log(isValid);
+            const isValid = await c.verify({
+                body,
+                signature: signatureHeader,
+            })
+            // console.log(isValid);
             //if (!isValid) throw new Error("Invalid")
             ctx.status(200);
             console.log(body);
 
-            // 'onboarding@resend.dev'
 
             const result = await resend.emails.send({
                 from: `onboarding@resend.dev`,
@@ -45,7 +42,6 @@ export async function handleUpstashQueueMessage(ctx: Context) {
                 html: '<strong>Meeting within 15mins</strong>',
             });
 
-            // cannot sendfrom gmail.com domain 
             if (result.error) {
                 console.error(result.error);
                 throw new Error("Couldn`t")

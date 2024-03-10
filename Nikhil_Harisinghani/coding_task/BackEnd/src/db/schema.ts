@@ -63,7 +63,3 @@ export const userBookedSlots = pgTable('userBookedSlots', {
     bookedDate: date('bookedDate').notNull(),
     eventId: serial('eventId').primaryKey(),
 })
-
-/// ## To add
-// event id
-// add client email as well

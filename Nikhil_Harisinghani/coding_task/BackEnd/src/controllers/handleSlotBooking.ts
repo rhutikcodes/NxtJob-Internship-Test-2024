@@ -1,4 +1,4 @@
-// Google API integration remaining
+// Google API integration remaining + take care of date formatting
 import { Context } from "hono";
 import { db } from "..";
 import { userBookedSlots, users } from "../db/schema";
@@ -9,14 +9,11 @@ function getEndTime(time: string) {
     let temp = Number(time.split(':')[0]) * 3600 + Number(time.split(':')[1]) * 60 + 30 * 60;
     let hrs = Math.floor(temp / 3600);
     let mins = (temp % 3600) / 60;
-    // console.log(temp);
 
     let finalhrs: string;
     let finalmins: string;
     if (hrs < 10) finalhrs = "0" + hrs.toString()
     else finalhrs = hrs.toString();
-
-    // console.log(finalhrs);
 
     if (mins < 10) finalmins = "0" + mins.toString()
     else finalmins = mins.toString()
@@ -36,28 +33,29 @@ export async function handleSlotBooking(ctx: Context) {
         
         if (emailId.length === 0) 
             return ctx.json({
-                "message": "User does not exist"
+                "message": "User does not exist",
+                "success":false
             })
         
         const userId = emailId[0].userId;
 
-        const slotsBookedOnThatDay = await db.select().from(userBookedSlots).innerJoin(users,eq(userBookedSlots.userId,users.userId)).where(eq(userBookedSlots.bookedDate, payload.date));
+        // const slotsBookedOnThatDay = await db.select().from(userBookedSlots).innerJoin(users,eq(userBookedSlots.userId,users.userId)).where(eq(userBookedSlots.bookedDate, payload.date));
                 
         const endTime = getEndTime(payload.startTime);
-        let isFeasible: boolean = true
+        // let isFeasible: boolean = true
                 
-        slotsBookedOnThatDay.forEach((tuple) => {
-            if (payload.startTime === tuple.userBookedSlots.startTime) {
-                isFeasible = false
-            }
-        })
+        // slotsBookedOnThatDay.forEach((tuple) => {
+        //     if (payload.startTime === tuple.userBookedSlots.startTime) {
+        //         isFeasible = false
+        //     }
+        // })
         
-        if (!isFeasible) {
-            return ctx.json({
-                "message": "User not busy",
-                "success": true
-            })
-        }
+        // if (!isFeasible) {
+        //     return ctx.json({
+        //         "message": "User busy",
+        //         "success": true
+        //     })
+        // }
 
         await db.insert(userBookedSlots).values({
             userId,
@@ -73,7 +71,8 @@ export async function handleSlotBooking(ctx: Context) {
         await handleMailScheduling(emailId[0].email, payload.clientEmailId, payload.date, payload.startTime);
             
         return ctx.json({
-            "message": "successfull"
+            "message": "successfull",
+            "success":true
         })
             
         } catch (error) {
@@ -197,15 +196,3 @@ export async function handleSlotBooking(ctx: Context) {
         
         // authorize().then(listEvents).catch(console.error);
         // // send token from front-end 
-
-
-// Not needed
-  // const isValidToken = await jwt.verify(token, publicKey, "RS256");
-        // const decodedToken: any = jwt.decode(token)
-        // const userId = decodedToken.payload.sub;
-        
-        // if (isValidToken === false)
-        //     return ctx.json({
-        //         "message": "Token Invalid/Expired",
-        //         "succes": false
-//     })
