@@ -15,7 +15,7 @@ export default function page() {
             try {
                 const token = await getToken()
                 if (token === null) throw new Error("error occured");
-                const resp = await fetch('http://localhost:8787/login', {
+                const resp = await fetch('https://back-end.nikhilharisinghani26.workers.dev/login', {
                     method: "POST",
                     body: JSON.stringify({
                         token

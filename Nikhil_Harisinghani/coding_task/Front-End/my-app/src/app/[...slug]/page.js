@@ -14,7 +14,7 @@ export default function page({ params }) {
 
         if (a.current) {
             console.log(params.slug[0])
-            fetch('http://localhost:8787/getAvailabilityOnADay', {
+            fetch('https://back-end.nikhilharisinghani26.workers.dev/getAvailabilityOnADay', {
                 method: "POST",
                 body: JSON.stringify({
                     slug: params.slug[0],
@@ -47,7 +47,7 @@ export default function page({ params }) {
         async function checkUserExists() {
 
             try {
-                fetch('http://localhost:8787/userExist', {
+                fetch('https://back-end.nikhilharisinghani26.workers.dev/userExist', {
                     body: JSON.stringify({
                         slug: params.slug[0]
                     }),

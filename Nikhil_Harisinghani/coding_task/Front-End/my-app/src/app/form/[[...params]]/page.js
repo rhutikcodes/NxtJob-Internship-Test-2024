@@ -13,7 +13,7 @@ export default function page({ params }) {
             return;
         }
 
-        const res = await fetch('http://localhost:8787/bookSlot', {
+        const res = await fetch('https://back-end.nikhilharisinghani26.workers.dev/bookSlot', {
             method: "POST",
             body: JSON.stringify({
                 payload: {

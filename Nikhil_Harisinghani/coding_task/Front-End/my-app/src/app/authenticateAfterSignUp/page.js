@@ -13,7 +13,7 @@ export default function page() {
 
     const handleOnClickSubmit = async () => {
 
-        const response = await fetch('http://localhost:8787/register-user', {
+        const response = await fetch('https://back-end.nikhilharisinghani26.workers.dev/register-user', {
 
             body: JSON.stringify({
                 slug: slug,

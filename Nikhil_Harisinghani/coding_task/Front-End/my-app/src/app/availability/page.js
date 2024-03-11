@@ -40,7 +40,7 @@ export default function page() {
         async function getTiming() {
             try {
                 const token = await getToken();
-                fetch('http://127.0.0.1:8787/getWeeklyschedule', {
+                fetch('https://back-end.nikhilharisinghani26.workers.dev/getWeeklyschedule', {
                     headers: {
                         'Authorization': `${token}`,
                         'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ export default function page() {
                     method: "GET"
                 }).then(async (data) => await data.json()).then((data) => {
                     console.log(data.respPayload)
-                    setAvailability(data.respPayload);
+                    if (data?.respPayload) setAvailability(data.respPayload);
                 })
 
             } catch (error) {
@@ -61,7 +61,7 @@ export default function page() {
 
     const handleOnClick = async () => {
         const token = await getToken();
-        fetch('http://127.0.0.1:8787/updateWeeklyschedule', {
+        fetch('https://back-end.nikhilharisinghani26.workers.dev/updateWeeklyschedule', {
             method: "PUT",
             body: JSON.stringify({
                 payload: availability
@@ -86,6 +86,8 @@ export default function page() {
 
                 <div className='grow mt-10'>
                     {
+                        daysofWeek
+                        &&
                         daysofWeek.map((day, idx) => {
                             return (
                                 <Comp

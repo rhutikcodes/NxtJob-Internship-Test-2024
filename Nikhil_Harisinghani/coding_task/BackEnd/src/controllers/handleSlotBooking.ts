@@ -1,4 +1,4 @@
-// Google API integration remaining + take care of date formatting
+// Google API integration remaining
 import { Context } from "hono";
 import { db } from "..";
 import { userBookedSlots, users } from "../db/schema";
