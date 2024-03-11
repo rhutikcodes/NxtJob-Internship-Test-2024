@@ -1,0 +1,341 @@
+{
+  "id": "42d9a15b-702f-49b3-b295-8fd8ddd17f85",
+  "prevId": "f407889e-2ee6-487b-85f8-d4ef18121382",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "userAvailability": {
+      "name": "userAvailability",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "startTime": {
+          "name": "startTime",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endTime": {
+          "name": "endTime",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'available'"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'now()'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'now()'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userAvailability_userId_users_userId_fk": {
+          "name": "userAvailability_userId_users_userId_fk",
+          "tableFrom": "userAvailability",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "userBookedSlots": {
+      "name": "userBookedSlots",
+      "schema": "",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "clientEmailId": {
+          "name": "clientEmailId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bookedFrom": {
+          "name": "bookedFrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bookedTill": {
+          "name": "bookedTill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bookedDate": {
+          "name": "bookedDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "eventId": {
+          "name": "eventId",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userBookedSlots_email_users_userId_fk": {
+          "name": "userBookedSlots_email_users_userId_fk",
+          "tableFrom": "userBookedSlots",
+          "tableTo": "users",
+          "columnsFrom": [
+            "email"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "userWeeklyAvailability": {
+      "name": "userWeeklyAvailability",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "MONfrom": {
+          "name": "MONfrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "MONtill": {
+          "name": "MONtill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TUEfrom": {
+          "name": "TUEfrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TUEtill": {
+          "name": "TUEtill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "WEDfrom": {
+          "name": "WEDfrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "WEDtill": {
+          "name": "WEDtill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "THUfrom": {
+          "name": "THUfrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "THUtill": {
+          "name": "THUtill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "FRIfrom": {
+          "name": "FRIfrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "FRItill": {
+          "name": "FRItill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SATfrom": {
+          "name": "SATfrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SATtill": {
+          "name": "SATtill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SUNfrom": {
+          "name": "SUNfrom",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SUNtill": {
+          "name": "SUNtill",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'now()'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'now()'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userWeeklyAvailability_userId_users_userId_fk": {
+          "name": "userWeeklyAvailability_userId_users_userId_fk",
+          "tableFrom": "userWeeklyAvailability",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "userId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'now()'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'now()'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_slug_unique": {
+          "name": "users_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        },
+        "users_userId_unique": {
+          "name": "users_userId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "userId"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
